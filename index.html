@@ -86,6 +86,62 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* Custom Word Rearrangement Animation Layout */
+        .animation-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+            perspective: 1000px;
+        }
+
+        .interactive-word {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 700;
+            display: flex;
+            justify-content: center;
+            gap: 2px; /* Small cushion between moving letter spans */
+        }
+
+        .interactive-word span {
+            display: inline-block;
+            position: relative;
+            transition: transform 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.5s ease;
+            background: linear-gradient(90deg, #ff6b35, #00a896, #ffbe0b, #ff6b35);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease infinite;
+        }
+
+        .fist-emoji {
+            position: absolute;
+            top: -150px;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            font-size: clamp(3rem, 8vw, 6rem);
+            z-index: 10;
+            pointer-events: none;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), top 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+        }
+
+        /* Impact State for Fist Drop */
+        .fist-emoji.strike {
+            top: 0px;
+            transform: translateX(-50%) scale(1.3);
+        }
+
+        /* Screen shake effect on impact */
+        .screen-quake {
+            animation: quake 0.15s ease-in-out infinite alternate;
+        }
+
+        @keyframes quake {
+            0% { transform: translate(2px, 1px) rotate(0deg); }
+            100% { transform: translate(-1px, -2px) rotate(0.5deg); }
+        }
+
         .hero-subtitle {
             font-size: clamp(1rem, 2.5vw, 1.5rem);
             font-weight: 300;
@@ -440,7 +496,12 @@
 
     <section class="hero">
         <div class="pulse-badge">🎯 Fight Back</div>
-        <h1>Defeat Sarcopenia</h1>
+        <div class="animation-wrapper">
+            <h1 id="dynamic-title" class="interactive-word">
+                <span>S</span><span>a</span><span>r</span><span>c</span><span>o</span><span>p</span><span>e</span><span>n</span><span>i</span><span>a</span>
+            </h1>
+            <div id="fist-striker" class="fist-emoji">👊</div>
+        </div>
         <p class="hero-subtitle">
             Muscle loss is not inevitable. Every rep, every step, every healthy meal is a declaration of war against weakness. 
             <strong>You have the power to rebuild, to strengthen, to thrive.</strong>
@@ -707,6 +768,76 @@
                     behavior: 'smooth'
                 });
             });
+        });
+
+        // --- Sarcopenia to Ainepocras Custom Sequence Engine ---
+        document.addEventListener("DOMContentLoaded", () => {
+            const titleEl = document.getElementById("dynamic-title");
+            const letters = titleEl.querySelectorAll("span");
+            const fist = document.getElementById("fist-striker");
+            const heroSection = document.querySelector(".hero");
+
+            // We need a short layout stabilization window before capturing absolute client positions
+            setTimeout(() => {
+                const positions = Array.from(letters).map(el => el.getBoundingClientRect().left);
+                
+                function runSequence() {
+                    // Reset to default Sarcopenia layout
+                    letters.forEach((letter, i) => {
+                        letter.style.transform = "translate(0px, 0px) rotate(0deg)";
+                        letter.style.opacity = "1";
+                        if(i === 0) letter.textContent = "S";
+                        if(i === 1 || i === 9) letter.textContent = "a";
+                    });
+                    fist.className = "fist-emoji";
+
+                    // Phase 1: Reverse Letters fluidly
+                    setTimeout(() => {
+                        letters.forEach((letter, i) => {
+                            const targetIndex = 9 - i;
+                            const xOffset = positions[targetIndex] - positions[i];
+                            letter.style.transform = `translateX(${xOffset}px)`;
+                        });
+                    }, 2000);
+
+                    // Phase 2: Fist Appears above
+                    setTimeout(() => {
+                        fist.style.transform = "translateX(-50%) scale(1)";
+                        fist.style.top = "-120px";
+                    }, 4500);
+
+                    // Phase 3: Fist strikes Downwards forcefully
+                    setTimeout(() => {
+                        fist.classList.add("strike");
+                        heroSection.classList.add("screen-quake");
+                    }, 5000);
+
+                    // Phase 4: Impact settles, letters snap to clean final sequence Ainepocras
+                    setTimeout(() => {
+                        heroSection.classList.remove("screen-quake");
+                        fist.style.transform = "translateX(-50%) scale(0)";
+                        fist.style.top = "-150px";
+
+                        // Exact index assignment re-mapping calculation
+                        const ainepocrasMapping = [0, 8, 7, 6, 5, 4, 3, 2, 1, 9];
+                        
+                        letters.forEach((letter, i) => {
+                            const targetPosIndex = ainepocrasMapping.indexOf(i);
+                            const xOffset = positions[targetPosIndex] - positions[i];
+                            
+                            if(i === 0) letter.textContent = "s";
+                            if(i === 9) letter.textContent = "A";
+
+                            letter.style.transform = `translateX(${xOffset}px) translateY(0px) rotate(0deg)`;
+                        });
+                    }, 5400);
+
+                    // Phase 5: Loop repetition cycle timing
+                    setTimeout(runSequence, 11000);
+                }
+
+                runSequence();
+            }, 500);
         });
     </script>
 </body>
