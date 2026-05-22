@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
+        
         body {
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
@@ -16,7 +16,6 @@
             color: #fff;
         }
 
-        /* Animated background particles */
         #particles-canvas {
             position: fixed;
             top: 0; left: 0;
@@ -25,7 +24,6 @@
             pointer-events: none;
         }
 
-        /* Hero Section */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -89,7 +87,6 @@
             50% { transform: scale(1.05); box-shadow: 0 0 50px rgba(255,107,53,0.6); }
         }
 
-        /* Floating muscle icons */
         .floating-icons {
             position: absolute;
             width: 100%;
@@ -117,7 +114,6 @@
             50% { transform: translateY(-30px) rotate(10deg); }
         }
 
-        /* Stats Counter Section */
         .stats-section {
             padding: 80px 20px;
             position: relative;
@@ -175,7 +171,6 @@
             font-weight: 400;
         }
 
-        /* Action Cards */
         .action-section {
             padding: 80px 20px;
             position: relative;
@@ -239,7 +234,6 @@
             font-size: 0.95rem;
         }
 
-        /* Progress Bar Animation */
         .progress-section {
             padding: 80px 20px;
             position: relative;
@@ -295,7 +289,6 @@
             100% { opacity: 0; }
         }
 
-        /* CTA Section */
         .cta-section {
             padding: 100px 20px;
             text-align: center;
@@ -325,7 +318,6 @@
             box-shadow: 0 20px 40px rgba(255,107,53,0.5);
         }
 
-        /* Music Toggle */
         .music-toggle {
             position: fixed;
             bottom: 30px;
@@ -358,7 +350,6 @@
             50% { box-shadow: 0 5px 40px rgba(255,107,53,0.8); }
         }
 
-        /* Footer */
         footer {
             padding: 40px 20px;
             text-align: center;
@@ -375,7 +366,6 @@
             text-decoration: none;
         }
 
-        /* Scroll animations */
         .fade-in {
             opacity: 0;
             transform: translateY(30px);
@@ -392,14 +382,12 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .stats-grid, .action-grid {
                 grid-template-columns: 1fr;
             }
         }
     </style>
-<base target="_blank">
 </head>
 <body>
     <canvas id="particles-canvas"></canvas>
@@ -413,7 +401,6 @@
         <span class="float-icon">🧘</span>
     </div>
 
-    <!-- Hero Section -->
     <section class="hero">
         <div class="pulse-badge">🎯 Fight Back</div>
         <h1>Defeat Sarcopenia</h1>
@@ -424,7 +411,6 @@
         <a href="#action" class="cta-button">Start Your Journey</a>
     </section>
 
-    <!-- Stats Section -->
     <section class="stats-section">
         <div class="stats-grid">
             <div class="stat-card fade-in">
@@ -446,44 +432,42 @@
         </div>
     </section>
 
-    <!-- Action Section -->
     <section class="action-section" id="action">
         <h2 class="section-title">Your <span>Battle Plan</span></h2>
         <div class="action-grid">
             <div class="action-card fade-in">
                 <span class="action-icon">🏋️</span>
                 <h3>Resistance Training</h3>
-                <p>Lift weights, use resistance bands, or do bodyweight exercises 2-3 times per week. Progressive overload is key — challenge your muscles to grow stronger.</p>
+                <p>Lift weights, use resistance bands, or do bodyweight exercises 2-3 times per week. Progressive overload is key.</p>
             </div>
             <div class="action-card fade-in">
                 <span class="action-icon">🥗</span>
                 <h3>Protein Power</h3>
-                <p>Aim for 1.0-1.2g of protein per kg of body weight daily. Spread intake across meals. Include leucine-rich foods like eggs, fish, poultry, and legumes.</p>
+                <p>Aim for 1.0-1.2g of protein per kg of body weight daily. Spread intake across meals.</p>
             </div>
             <div class="action-card fade-in">
                 <span class="action-icon">🏃</span>
                 <h3>Move Every Day</h3>
-                <p>Walking, swimming, cycling — keep moving. Consistency beats intensity. Even 30 minutes of daily activity protects muscle and boosts vitality.</p>
+                <p>Walking, swimming, cycling — keep moving. Consistency beats intensity.</p>
             </div>
             <div class="action-card fade-in">
                 <span class="action-icon">😴</span>
                 <h3>Rest & Recover</h3>
-                <p>Muscles grow during rest. Prioritize 7-9 hours of quality sleep. Recovery days are not lazy days — they are growth days.</p>
+                <p>Muscles grow during rest. Prioritize 7-9 hours of quality sleep.</p>
             </div>
             <div class="action-card fade-in">
                 <span class="action-icon">🧘</span>
                 <h3>Balance & Flexibility</h3>
-                <p>Yoga, tai chi, and stretching improve stability and prevent falls. A strong body is useless without control. Train your mind-muscle connection.</p>
+                <p>Yoga, tai chi, and stretching improve stability and prevent falls.</p>
             </div>
             <div class="action-card fade-in">
                 <span class="action-icon">📊</span>
                 <h3>Track Progress</h3>
-                <p>Measure strength gains, not just weight. Take progress photos. Celebrate small wins. Data is motivation — watch yourself transform.</p>
+                <p>Measure strength gains, not just weight. Celebrate small wins.</p>
             </div>
         </div>
     </section>
 
-    <!-- Progress Section -->
     <section class="progress-section">
         <h2 class="section-title">The <span>Power of Consistency</span></h2>
         <div class="progress-container">
@@ -526,18 +510,15 @@
         </div>
     </section>
 
-    <!-- CTA Section -->
     <section class="cta-section">
         <h2 class="section-title" style="margin-bottom: 30px;">Today is <span>Day One</span></h2>
         <p style="max-width: 600px; margin: 0 auto 40px; color: #ccc; line-height: 1.8; font-size: 1.1rem;">
             Sarcopenia wants you to slow down. To give up. To accept weakness as aging. 
-            <strong style="color: #ffbe0b;">Refuse.</strong> Every muscle fiber you save is a day of independence you gain. 
-            Every rep is a vote for the future you want.
+            <strong style="color: #ffbe0b;">Refuse.</strong> Every muscle fiber you save is a day of independence you gain.
         </p>
         <a href="#action" class="cta-button">I Choose Strength 💪</a>
     </section>
 
-    <!-- Footer -->
     <footer>
         <p>Built with 💪 by <a href="https://github.com/ainepocras">ainepocras</a> | Fight Sarcopenia | Every Day Counts</p>
         <p style="margin-top: 10px; font-size: 0.75rem; color: #444;">
@@ -545,7 +526,11 @@
         </p>
     </footer>
 
-    <!-- Music Toggle -->
+    <!-- Hidden Audio Element for Music -->
+    <audio id="bgMusic" loop>
+        <source src="motivation.mp3" type="audio/mpeg">
+    </audio>
+
     <button class="music-toggle" id="musicBtn" title="Toggle Motivational Music">🎵</button>
 
     <script>
@@ -593,8 +578,7 @@
                 p.update();
                 p.draw();
             });
-
-            // Draw connections
+            
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
@@ -625,8 +609,7 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-
-                    // Animate numbers
+                    
                     if (entry.target.querySelector('.stat-number')) {
                         const numEl = entry.target.querySelector('.stat-number');
                         const target = parseInt(numEl.dataset.target);
@@ -642,8 +625,7 @@
                             }
                         }, 30);
                     }
-
-                    // Animate progress bars
+                    
                     if (entry.target.querySelector('.progress-bar-fill')) {
                         const bar = entry.target.querySelector('.progress-bar-fill');
                         setTimeout(() => {
@@ -656,89 +638,32 @@
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // Music (Web Audio API - generates motivational ambient sound)
-        let audioContext = null;
-        let oscillators = [];
+        // Music Toggle with Audio File
         let isPlaying = false;
-        let gainNode = null;
-
-        function createMotivationalMusic() {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            gainNode = audioContext.createGain();
-            gainNode.gain.value = 0.08;
-            gainNode.connect(audioContext.destination);
-
-            const frequencies = [261.63, 329.63, 392.00, 523.25]; // C major chord
-            const lfoFrequencies = [0.1, 0.15, 0.12, 0.08];
-
-            frequencies.forEach((freq, i) => {
-                const osc = audioContext.createOscillator();
-                const lfo = audioContext.createOscillator();
-                const lfoGain = audioContext.createGain();
-
-                osc.type = 'sine';
-                osc.frequency.value = freq;
-
-                lfo.type = 'sine';
-                lfo.frequency.value = lfoFrequencies[i];
-                lfoGain.gain.value = 2;
-
-                lfo.connect(lfoGain);
-                lfoGain.connect(osc.frequency);
-                osc.connect(gainNode);
-
-                osc.start();
-                lfo.start();
-                oscillators.push({ osc, lfo });
-            });
-
-            // Add a rhythmic pulse
-            const pulseOsc = audioContext.createOscillator();
-            const pulseGain = audioContext.createGain();
-            pulseOsc.type = 'triangle';
-            pulseOsc.frequency.value = 65.41;
-            pulseGain.gain.value = 0.03;
-
-            // Create rhythmic pattern
-            const pattern = [1, 0, 0.5, 0, 1, 0.5, 0, 0.5];
-            let patternIndex = 0;
-
-            setInterval(() => {
-                pulseGain.gain.value = pattern[patternIndex] * 0.04;
-                patternIndex = (patternIndex + 1) % pattern.length;
-            }, 250);
-
-            pulseOsc.connect(pulseGain);
-            pulseGain.connect(audioContext.destination);
-            pulseOsc.start();
-            oscillators.push({ osc: pulseOsc, lfo: null });
-        }
-
-        function stopMusic() {
-            oscillators.forEach(({ osc, lfo }) => {
-                try { osc.stop(); } catch(e) {}
-                if (lfo) try { lfo.stop(); } catch(e) {}
-            });
-            oscillators = [];
-            if (audioContext) audioContext.close();
-            audioContext = null;
-        }
+        const audio = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
 
         document.getElementById('musicBtn').addEventListener('click', function() {
             if (!isPlaying) {
-                createMotivationalMusic();
-                this.classList.add('playing');
-                this.textContent = '🔊';
-                isPlaying = true;
+                audio.volume = 0.3;
+                audio.play().then(() => {
+                    this.classList.add('playing');
+                    this.textContent = '🔊';
+                    isPlaying = true;
+                }).catch(e => {
+                    console.log('Audio play failed:', e);
+                    alert('Music file not found. Please upload motivation.mp3 to your repository.');
+                });
             } else {
-                stopMusic();
+                audio.pause();
+                audio.currentTime = 0;
                 this.classList.remove('playing');
                 this.textContent = '🎵';
                 isPlaying = false;
             }
         });
 
-        // Smooth scroll for anchor links
+        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
