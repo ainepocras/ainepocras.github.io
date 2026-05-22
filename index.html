@@ -66,26 +66,6 @@
             background: linear-gradient(135deg, rgba(255,107,53,0.15) 0%, rgba(0,168,150,0.15) 50%, rgba(255,190,11,0.15) 100%);
         }
 
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            font-weight: 700;
-            margin-bottom: 20px;
-            background: linear-gradient(90deg, #ff6b35, #00a896, #ffbe0b, #ff6b35);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradientShift 4s ease infinite;
-            text-shadow: 0 0 60px rgba(255,107,53,0.3);
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
         /* Custom Word Rearrangement Animation Layout */
         .animation-wrapper {
             position: relative;
@@ -100,13 +80,13 @@
             font-weight: 700;
             display: flex;
             justify-content: center;
-            gap: 2px; /* Small cushion between moving letter spans */
+            gap: 4px; /* Slightly wider cushioning to avoid any sub-pixel kerning collisions */
         }
 
         .interactive-word span {
             display: inline-block;
             position: relative;
-            transition: transform 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.5s ease;
+            transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease;
             background: linear-gradient(90deg, #ff6b35, #00a896, #ffbe0b, #ff6b35);
             background-size: 300% 300%;
             -webkit-background-clip: text;
@@ -115,31 +95,35 @@
             animation: gradientShift 4s ease infinite;
         }
 
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .fist-emoji {
             position: absolute;
-            top: -150px;
+            top: -180px;
             left: 50%;
             transform: translateX(-50%) scale(0);
-            font-size: clamp(3rem, 8vw, 6rem);
+            font-size: clamp(3.5rem, 9vw, 6.5rem);
             z-index: 10;
             pointer-events: none;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), top 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+            transition: transform 0.2s ease-out, top 0.2s cubic-bezier(0.6, -0.28, 0.735, 0.045);
         }
 
-        /* Impact State for Fist Drop */
         .fist-emoji.strike {
-            top: 0px;
-            transform: translateX(-50%) scale(1.3);
+            top: -10px;
+            transform: translateX(-50%) scale(1.4);
         }
 
-        /* Screen shake effect on impact */
         .screen-quake {
             animation: quake 0.15s ease-in-out infinite alternate;
         }
 
         @keyframes quake {
-            0% { transform: translate(2px, 1px) rotate(0deg); }
-            100% { transform: translate(-1px, -2px) rotate(0.5deg); }
+            0% { transform: translate(3px, 2px) rotate(0deg); }
+            100% { transform: translate(-2px, -3px) rotate(0.5deg); }
         }
 
         .hero-subtitle {
@@ -149,8 +133,6 @@
             max-width: 700px;
             margin-bottom: 40px;
             line-height: 1.6;
-            opacity: 0;
-            animation: fadeInUp 1s ease 0.5s forwards;
         }
 
         .pulse-badge {
@@ -462,11 +444,6 @@
             transform: translateY(0);
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         @media (max-width: 768px) {
             .stats-grid, .action-grid {
                 grid-template-columns: 1fr;
@@ -770,74 +747,102 @@
             });
         });
 
-        // --- Sarcopenia to Ainepocras Custom Sequence Engine ---
+        // --- Bulletproof Letter Rearrangement Engine ---
         document.addEventListener("DOMContentLoaded", () => {
             const titleEl = document.getElementById("dynamic-title");
             const letters = titleEl.querySelectorAll("span");
             const fist = document.getElementById("fist-striker");
             const heroSection = document.querySelector(".hero");
 
-            // We need a short layout stabilization window before capturing absolute client positions
+            // Absolute static letter data initialization to completely avoid spelling glitches
+            const originalData = [
+                { char: "S", index: 0 },
+                { char: "a", index: 1 },
+                { char: "r", index: 2 },
+                { char: "c", index: 3 },
+                { char: "o", index: 4 },
+                { char: "p", index: 5 },
+                { char: "e", index: 6 },
+                { char: "n", index: 7 },
+                { char: "i", index: 8 },
+                { char: "a", index: 9 }
+            ];
+
+            // Wait briefly for layout and kerning engines to settle, then capture stable initial position offsets
             setTimeout(() => {
-                const positions = Array.from(letters).map(el => el.getBoundingClientRect().left);
-                
+                const basePositions = Array.from(letters).map(el => el.getBoundingClientRect().left);
+
                 function runSequence() {
-                    // Reset to default Sarcopenia layout
-                    letters.forEach((letter, i) => {
-                        letter.style.transform = "translate(0px, 0px) rotate(0deg)";
-                        letter.style.opacity = "1";
-                        if(i === 0) letter.textContent = "S";
-                        if(i === 1 || i === 9) letter.textContent = "a";
+                    // 1. Reset layout explicitly to: "Sarcopenia"
+                    letters.forEach((span, i) => {
+                        span.textContent = originalData[i].char;
+                        span.style.transform = "translateX(0px) translateY(0px) rotate(0deg)";
+                        span.style.opacity = "1";
                     });
                     fist.className = "fist-emoji";
 
-                    // Phase 1: Reverse Letters fluidly
+                    // 2. Phase 1: Reverse fluidly to "ainepocraS"
+                    // Mapping target order to original indices: [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
                     setTimeout(() => {
-                        letters.forEach((letter, i) => {
-                            const targetIndex = 9 - i;
-                            const xOffset = positions[targetIndex] - positions[i];
-                            letter.style.transform = `translateX(${xOffset}px)`;
+                        letters.forEach((span, i) => {
+                            const targetPosIndex = 9 - i;
+                            const xOffset = basePositions[targetPosIndex] - basePositions[i];
+                            span.style.transform = `translateX(${xOffset}px)`;
                         });
-                    }, 2000);
+                    }, 2500);
 
-                    // Phase 2: Fist Appears above
+                    // 3. Phase 2: Hover fist above 
                     setTimeout(() => {
                         fist.style.transform = "translateX(-50%) scale(1)";
-                        fist.style.top = "-120px";
-                    }, 4500);
+                        fist.style.top = "-140px";
+                    }, 5000);
 
-                    // Phase 3: Fist strikes Downwards forcefully
+                    // 4. Phase 3: Punch Downwards forcefully
                     setTimeout(() => {
                         fist.classList.add("strike");
                         heroSection.classList.add("screen-quake");
-                    }, 5000);
+                    }, 5400);
 
-                    // Phase 4: Impact settles, letters snap to clean final sequence Ainepocras
+                    // 5. Phase 4: Instant rearrange on impact to: "Ainepocras"
+                    // To guarantee no letter overlaps or double character clones like the screenshot,
+                    // we map the EXACT target index seats for "Ainepocras" from the original "Sarcopenia" spans:
+                    // 'A' comes from original index 9 (capitalized)
+                    // 'i' comes from original index 8
+                    // 'n' comes from original index 7
+                    // 'e' comes from original index 6
+                    // 'p' comes from original index 5
+                    // 'o' comes from original index 4
+                    // 'c' comes from original index 3
+                    // 'r' comes from original index 2
+                    // 'a' comes from original index 1
+                    // 's' comes from original index 0 (lowercased)
                     setTimeout(() => {
                         heroSection.classList.remove("screen-quake");
                         fist.style.transform = "translateX(-50%) scale(0)";
-                        fist.style.top = "-150px";
+                        fist.style.top = "-180px";
 
-                        // Exact index assignment re-mapping calculation
-                        const ainepocrasMapping = [0, 8, 7, 6, 5, 4, 3, 2, 1, 9];
-                        
-                        letters.forEach((letter, i) => {
-                            const targetPosIndex = ainepocrasMapping.indexOf(i);
-                            const xOffset = positions[targetPosIndex] - positions[i];
-                            
-                            if(i === 0) letter.textContent = "s";
-                            if(i === 9) letter.textContent = "A";
+                        // Map array matching "Ainepocras" layout order back to original indices
+                        const finalMapping = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
 
-                            letter.style.transform = `translateX(${xOffset}px) translateY(0px) rotate(0deg)`;
+                        letters.forEach((span, i) => {
+                            // Find where this specific span element needs to sit in the final string layout
+                            const finalPositionSeat = finalMapping.indexOf(i);
+                            const xOffset = basePositions[finalPositionSeat] - basePositions[i];
+
+                            // Fix cases perfectly to eliminate overlap duplications
+                            if (i === 9) span.textContent = "A";
+                            if (i === 0) span.textContent = "s";
+
+                            span.style.transform = `translateX(${xOffset}px)`;
                         });
-                    }, 5400);
+                    }, 5600);
 
-                    // Phase 5: Loop repetition cycle timing
+                    // Loop repetition window timer (Stay on final name for 5 seconds)
                     setTimeout(runSequence, 11000);
                 }
 
                 runSequence();
-            }, 500);
+            }, 600);
         });
     </script>
 </body>
