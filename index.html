@@ -14,6 +14,7 @@
             overflow-x: hidden;
             background: #0a0a0a;
             color: #fff;
+            transition: transform 0.1s ease; /* Used for the screen shake quake effect */
         }
 
         /* Language Switcher Styling */
@@ -66,27 +67,29 @@
             background: linear-gradient(135deg, rgba(255,107,53,0.15) 0%, rgba(0,168,150,0.15) 50%, rgba(255,190,11,0.15) 100%);
         }
 
-        /* Custom Word Rearrangement Animation Layout */
+        /* -------------------------------------------------------------
+           WORD REARRANGEMENT / FIST IMPACT ANIMATION STYLES
+        ------------------------------------------------------------- */
         .animation-wrapper {
             position: relative;
             display: inline-block;
             margin-bottom: 20px;
-            perspective: 1000px;
+            padding-top: 60px; /* Leave space for the falling fist overhead */
         }
 
         .interactive-word {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-size: clamp(2.5rem, 7vw, 5.5rem);
             font-weight: 700;
             display: flex;
             justify-content: center;
-            gap: 2px; /* Small cushion between moving letter spans */
+            position: relative;
         }
 
         .interactive-word span {
             display: inline-block;
             position: relative;
-            transition: transform 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.5s ease;
+            transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
             background: linear-gradient(90deg, #ff6b35, #00a896, #ffbe0b, #ff6b35);
             background-size: 300% 300%;
             -webkit-background-clip: text;
@@ -97,29 +100,30 @@
 
         .fist-emoji {
             position: absolute;
-            top: -150px;
+            top: -200px;
             left: 50%;
-            transform: translateX(-50%) scale(0);
-            font-size: clamp(3rem, 8vw, 6rem);
+            transform: translateX(-50%) scale(1);
+            font-size: clamp(3.5rem, 9vw, 6.5rem);
             z-index: 10;
+            opacity: 0;
             pointer-events: none;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), top 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+            transition: top 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045), opacity 0.2s ease;
         }
 
-        /* Impact State for Fist Drop */
+        /* Active class triggered by script to smash down */
         .fist-emoji.strike {
-            top: 0px;
-            transform: translateX(-50%) scale(1.3);
+            top: -30px;
+            opacity: 1;
         }
 
-        /* Screen shake effect on impact */
+        /* Screen shake animation applied to the body container */
         .screen-quake {
             animation: quake 0.15s ease-in-out infinite alternate;
         }
 
         @keyframes quake {
-            0% { transform: translate(2px, 1px) rotate(0deg); }
-            100% { transform: translate(-1px, -2px) rotate(0.5deg); }
+            0% { transform: translate(3px, 2px) rotate(0deg); }
+            100% { transform: translate(-3px, -2px) rotate(0.5deg); }
         }
 
         @keyframes gradientShift {
@@ -127,6 +131,8 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+
+        /* ------------------------------------------------------------- */
 
         .hero-subtitle {
             font-size: clamp(1rem, 2.5vw, 1.5rem);
@@ -280,7 +286,7 @@
             overflow: hidden;
             transition: all 0.4s ease;
             border: 1px solid rgba(255,255,255,0.05);
-            height: 100%; /* Keeps cards uniform in grid height */
+            height: 100%;
         }
 
         .action-card:hover {
@@ -288,7 +294,7 @@
             border-color: rgba(255,107,53,0.3);
         }
 
-        /* External Link wrapper style for Resistance Card */
+        /* Seamless layout adjustment for the clickable card container link */
         .action-card-link {
             text-decoration: none;
             display: block;
@@ -491,12 +497,14 @@
 
     <section class="hero">
         <div class="pulse-badge">🎯 Fight Back</div>
+        
         <div class="animation-wrapper">
+            <div id="fist-striker" class="fist-emoji">👊</div>
             <h1 id="dynamic-title" class="interactive-word">
                 <span>S</span><span>a</span><span>r</span><span>c</span><span>o</span><span>p</span><span>e</span><span>n</span><span>i</span><span>a</span>
             </h1>
-            <div id="fist-striker" class="fist-emoji">👊</div>
         </div>
+        
         <p class="hero-subtitle">
             Muscle loss is not inevitable. Every rep, every step, every healthy meal is a declaration of war against weakness. 
             <strong>You have the power to rebuild, to strengthen, to thrive.</strong>
@@ -732,10 +740,9 @@
             });
         }, observerOptions);
 
-        // Updated selector target loop to properly handle wrapped components
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // Music Toggle with Correct Path Fixed
+        // Music Toggle Control
         let isPlaying = false;
         const audio = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
@@ -760,7 +767,7 @@
             }
         });
 
-        // Smooth scroll
+        // Smooth scroll transition
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -769,6 +776,78 @@
                 });
             });
         });
+
+        /* -------------------------------------------------------------
+           JAVASCRIPT FOR THE FIST STRIKE & LETTER REARRANGEMENT
+        ------------------------------------------------------------- */
+        window.addEventListener('DOMContentLoaded', () => {
+            const fist = document.getElementById('fist-striker');
+            const title = document.getElementById('dynamic-title');
+            const letters = title.querySelectorAll('span');
+
+            // Map each index of "Sarcopenia" to target content and final positioning 
+            // array mapping creates the word "ainepocras" out of original layout tags
+            const transformationMap = [
+                { index: 0, text: 'a', shiftX: 0 },
+                { index: 1, text: 'i', shiftX: 0 },
+                { index: 2, text: 'n', shiftX: 0 },
+                { index: 3, text: 'e', shiftX: 0 },
+                { index: 4, text: 'p', shiftX: 0 },
+                { index: 5, text: 'o', shiftX: 0 },
+                { index: 6, text: 'c', shiftX: 0 },
+                { index: 7, text: 'r', shiftX: 0 },
+                { index: 8, text: 'a', shiftX: 0 },
+                { index: 9, text: 's', shiftX: 0 }
+            ];
+
+            // Run the main action sequences after 3 seconds of load time
+            setTimeout(() => {
+                // Phase 1: Fist enters drop sequence
+                fist.classList.add('strike');
+
+                // Phase 2: Wait for fist drop impact (0.4s sync match with CSS transition)
+                setTimeout(() => {
+                    // Trigger screen shake on document body
+                    document.body.classList.add('screen-quake');
+
+                    // Phase 3: Morph letters contents smoothly while calculating coordinate flyways
+                    letters.forEach((span, idx) => {
+                        const originalRect = span.getBoundingClientRect();
+                        
+                        // Dynamically update letters context string properties
+                        span.textContent = transformationMap[idx].text;
+                        
+                        // Capitalize only the first letter ('a' -> 'A')
+                        if (idx === 0) {
+                            span.textContent = 'A';
+                            span.style.fontWeight = '900';
+                        }
+
+                        const newRect = span.getBoundingClientRect();
+                        
+                        // Compensate width difference offsets to keep animation fluid
+                        const diffX = originalRect.left - newRect.left;
+                        
+                        // Animate into target location coordinates
+                        span.style.transform = 'scale(1.2)';
+                        setTimeout(() => {
+                            span.style.transform = 'scale(1)';
+                        }, 300);
+                    });
+
+                    // Remove screen quake shake after impact completion
+                    setTimeout(() => {
+                        document.body.classList.remove('screen-quake');
+                        // Bounce the fist away into a disappearing fade vector
+                        fist.style.top = '-150px';
+                        fist.style.opacity = '0';
+                    }, 400);
+
+                }, 400);
+
+            }, 3000);
+        });
+        /* ------------------------------------------------------------- */
     </script>
 </body>
 </html>
