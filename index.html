@@ -785,8 +785,6 @@
             const title = document.getElementById('dynamic-title');
             const letters = title.querySelectorAll('span');
 
-            // Map each index of "Sarcopenia" to target content and final positioning 
-            // array mapping creates the word "ainepocras" out of original layout tags
             const transformationMap = [
                 { index: 0, text: 'a', shiftX: 0 },
                 { index: 1, text: 'i', shiftX: 0 },
@@ -800,48 +798,43 @@
                 { index: 9, text: 's', shiftX: 0 }
             ];
 
-            // Run the main action sequences after 3 seconds of load time
+            // 1. Initial trigger after 3 seconds of load time
             setTimeout(() => {
-                // Phase 1: Fist enters drop sequence
-                fist.classList.add('strike');
+                fist.classList.add('strike'); // Fist smashes down
 
-                // Phase 2: Wait for fist drop impact (0.4s sync match with CSS transition)
+                // 2. This triggers exactly when the fist hits the text (400ms matching CSS transition)
                 setTimeout(() => {
-                    // Trigger screen shake on document body
                     document.body.classList.add('screen-quake');
 
-                    // Phase 3: Morph letters contents smoothly while calculating coordinate flyways
+                    // Swap letters immediately on impact
                     letters.forEach((span, idx) => {
                         const originalRect = span.getBoundingClientRect();
-                        
-                        // Dynamically update letters context string properties
                         span.textContent = transformationMap[idx].text;
                         
-                        // Capitalize only the first letter ('a' -> 'A')
                         if (idx === 0) {
                             span.textContent = 'A';
                             span.style.fontWeight = '900';
                         }
 
-                        const newRect = span.getBoundingClientRect();
-                        
-                        // Compensate width difference offsets to keep animation fluid
-                        const diffX = originalRect.left - newRect.left;
-                        
-                        // Animate into target location coordinates
                         span.style.transform = 'scale(1.2)';
                         setTimeout(() => {
                             span.style.transform = 'scale(1)';
                         }, 300);
                     });
 
-                    // Remove screen quake shake after impact completion
+                    // Stop the screen shaking slightly after impact
                     setTimeout(() => {
                         document.body.classList.remove('screen-quake');
-                        // Bounce the fist away into a disappearing fade vector
-                        fist.style.top = '-150px';
-                        fist.style.opacity = '0';
                     }, 400);
+
+                    // === INCREASED STAY TIME HERE ===
+                    // This control determines how long the fist holds its position before leaving.
+                    // 2500ms means it stays planted in place for 2.5 seconds.
+                    setTimeout(() => {
+                        fist.style.transition = 'top 1s ease, opacity 1s ease'; // Slow down the exit animation
+                        fist.style.top = '-150px';                             // Send it away
+                        fist.style.opacity = '0';                              // Fade it out
+                    }, 2500); 
 
                 }, 400);
 
