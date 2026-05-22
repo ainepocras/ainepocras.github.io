@@ -16,6 +16,35 @@
             color: #fff;
         }
 
+        /* Language Switcher Styling */
+        .lang-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+        }
+        
+        .lang-switcher select {
+            background: rgba(10, 10, 10, 0.8);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            outline: none;
+            transition: border-color 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+        
+        .lang-switcher select:hover {
+            border-color: #ff6b35;
+        }
+
         #particles-canvas {
             position: fixed;
             top: 0; left: 0;
@@ -390,6 +419,14 @@
     </style>
 </head>
 <body>
+    <div class="lang-switcher">
+        <select onchange="location = this.value;">
+            <option value="index.html" selected>🇬🇧 EN</option>
+            <option value="es.html">🇪🇸 ES</option>
+            <option value="nl.html">🇳🇱 NL</option>
+        </select>
+    </div>
+
     <canvas id="particles-canvas"></canvas>
 
     <div class="floating-icons">
@@ -526,7 +563,6 @@
         </p>
     </footer>
 
-    <!-- Hidden Audio Element for Music -->
     <audio id="bgMusic" loop>
         <source src="synthwave.mp3" type="audio/mpeg">
     </audio>
@@ -638,12 +674,12 @@
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // Music Toggle with Audio File
+        // Music Toggle with Correct Path Fixed
         let isPlaying = false;
         const audio = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
 
-        document.getElementById('musicBtn').addEventListener('click', function() {
+        musicBtn.addEventListener('click', function() {
             if (!isPlaying) {
                 audio.volume = 0.3;
                 audio.play().then(() => {
@@ -652,7 +688,7 @@
                     isPlaying = true;
                 }).catch(e => {
                     console.log('Audio play failed:', e);
-                    alert('Music file not found. Please upload motivation.mp3 to your repository.');
+                    alert('Could not play audio. Please verify synthwave.mp3 exists in your root folder.');
                 });
             } else {
                 audio.pause();
