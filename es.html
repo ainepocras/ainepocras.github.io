@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ainepocras - Combate la Sarcopenia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            background: #0a0a0a;
+            color: #fff;
+        }
+
+        /* Language Switcher Styling */
+        .lang-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+        }
+        
+        .lang-switcher select {
+            background: rgba(10, 10, 10, 0.8);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            outline: none;
+            transition: border-color 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+        
+        .lang-switcher select:hover {
+            border-color: #ff6b35;
+        }
+
+        #particles-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255,107,53,0.15) 0%, rgba(0,168,150,0.15) 50%, rgba(255,190,11,0.15) 100%);
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #ff6b35, #00a896, #ffbe0b, #ff6b35);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease infinite;
+            text-shadow: 0 0 60px rgba(255,107,53,0.3);
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            font-weight: 300;
+            color: #e0e0e0;
+            max-width: 700px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.5s forwards;
+        }
+
+        .pulse-badge {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #ff6b35, #ffbe0b);
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            animation: pulse 2s ease infinite;
+            box-shadow: 0 0 30px rgba(255,107,53,0.4);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(255,107,53,0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 50px rgba(255,107,53,0.6); }
+        }
+
+        .floating-icons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .float-icon {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.15;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .float-icon:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .float-icon:nth-child(2) { top: 20%; right: 15%; animation-delay: 1s; }
+        .float-icon:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 2s; }
+        .float-icon:nth-child(4) { bottom: 20%; right: 10%; animation-delay: 3s; }
+        .float-icon:nth-child(5) { top: 50%; left: 5%; animation-delay: 4s; }
+        .float-icon:nth-child(6) { top: 60%; right: 20%; animation-delay: 5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+
+        .stats-section {
+            padding: 80px 20px;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 100%);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 4px;
+            background: linear-gradient(90deg, #ff6b35, #00a896, #ffbe0b);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255,107,53,0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff6b35, #ffbe0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: #aaa;
+            font-weight: 400;
+        }
+
+        .action-section {
+            padding: 80px 20px;
+            position: relative;
+            z-index: 1;
+            background: #0f0f1a;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 60px;
+            color: #fff;
+        }
+
+        .section-title span {
+            background: linear-gradient(135deg, #00a896, #ffbe0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .action-card {
+            background: linear-gradient(135deg, rgba(255,107,53,0.1), rgba(0,168,150,0.1));
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .action-card:hover {
+            transform: scale(1.03);
+            border-color: rgba(255,107,53,0.3);
+        }
+
+        .action-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .action-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .action-card p {
+            color: #aaa;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .progress-section {
+            padding: 80px 20px;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(180deg, #1a1a2e 0%, #0a0a0a 100%);
+        }
+
+        .progress-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .progress-item {
+            margin-bottom: 35px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .progress-bar-bg {
+            height: 12px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #ff6b35, #ffbe0b);
+            width: 0%;
+            transition: width 2s ease;
+            position: relative;
+        }
+
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            right: 0; top: 0;
+            width: 20px; height: 100%;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .cta-section {
+            padding: 100px 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(135deg, rgba(255,107,53,0.2), rgba(0,168,150,0.2));
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 18px 50px;
+            background: linear-gradient(135deg, #ff6b35, #ffbe0b);
+            color: #0a0a0a;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255,107,53,0.3);
+            border: none;
+            cursor: pointer;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255,107,53,0.5);
+        }
+
+        .music-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b35, #ffbe0b);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 20px rgba(255,107,53,0.4);
+            transition: all 0.3s ease;
+        }
+
+        .music-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .music-toggle.playing {
+            animation: musicPulse 1s ease infinite;
+        }
+
+        @keyframes musicPulse {
+            0%, 100% { box-shadow: 0 5px 20px rgba(255,107,53,0.4); }
+            50% { box-shadow: 0 5px 40px rgba(255,107,53,0.8); }
+        }
+
+        footer {
+            padding: 40px 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.85rem;
+            position: relative;
+            z-index: 1;
+            background: #0a0a0a;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        footer a {
+            color: #ff6b35;
+            text-decoration: none;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid, .action-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-switcher">
+        <select onchange="location = this.value;">
+            <option value="index.html">🇬🇧 EN</option>
+            <option value="es.html" selected>🇪🇸 ES</option>
+            <option value="nl.html">🇳🇱 NL</option>
+        </select>
+    </div>
+
+    <canvas id="particles-canvas"></canvas>
+
+    <div class="floating-icons">
+        <span class="float-icon">💪</span>
+        <span class="float-icon">🏋️</span>
+        <span class="float-icon">🦵</span>
+        <span class="float-icon">🏃</span>
+        <span class="float-icon">🥗</span>
+        <span class="float-icon">🧘</span>
+    </div>
+
+    <section class="hero">
+        <div class="pulse-badge">🎯 Contraataca</div>
+        <h1>Derrota la Sarcopenia</h1>
+        <p class="hero-subtitle">
+            La pérdida de masa muscular no es inevitable. Cada repetición, cada paso y cada comida saludable es una declaración de guerra contra la debilidad. 
+            <strong>Tienes el poder de reconstruir, fortalecer y prosperar.</strong>
+        </p>
+        <a href="#action" class="cta-button">Comienza Tu Viaje</a>
+    </section>
+
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card fade-in">
+                <div class="stat-number" data-target="10">0</div>
+                <div class="stat-label">% Pérdida Muscular por Década después de los 50</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-number" data-target="30">0</div>
+                <div class="stat-label">% Reducción del Riesgo con Ejercicio Regular</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-number" data-target="100">0</div>
+                <div class="stat-label">% Reversible con el Entrenamiento Adecuado</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-number" data-target="1">0</div>
+                <div class="stat-label">Día a la Vez para Desarrollar Fuerza</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="action-section" id="action">
+        <h2 class="section-title">Tu <span>Plan de Batalla</span></h2>
+        <div class="action-grid">
+            <div class="action-card fade-in">
+                <span class="action-icon">🏋️</span>
+                <h3>Entrenamiento de Resistencia</h3>
+                <p>Levanta pesas, usa bandas elásticas o haz ejercicios con tu peso corporal de 2 a 3 veces por semana. La sobrecarga progresiva es la clave.</p>
+            </div>
+            <div class="action-card fade-in">
+                <span class="action-icon">🥗</span>
+                <h3>Poder de las Proteínas</h3>
+                <p>Apunta a consumir entre 1.0 y 1.2 g de proteína por kg de peso corporal al día. Distribuye el consumo a lo largo de las comidas.</p>
+            </div>
+            <div class="action-card fade-in">
+                <span class="action-icon">🏃</span>
+                <h3>Muévete Todos los Días</h3>
+                <p>Camina, nada, anda en bicicleta... mantente en movimiento. La constancia supera a la intensidad.</p>
+            </div>
+            <div class="action-card fade-in">
+                <span class="action-icon">😴</span>
+                <h3>Descanso y Recuperación</h3>
+                <p>Los músculos crecen durante el descanso. Prioriza entre 7 y 9 horas de sueño de calidad.</p>
+            </div>
+            <div class="action-card fade-in">
+                <span class="action-icon">🧘</span>
+                <h3>Equilibrio y Flexibilidad</h3>
+                <p>El yoga, el tai chi y los estiramientos mejoran la estabilidad y ayudan a prevenir caídas.</p>
+            </div>
+            <div class="action-card fade-in">
+                <span class="action-icon">📊</span>
+                <h3>Registra tu Progreso</h3>
+                <p>Mide tus ganancias de fuerza, no solo el peso. Celebra cada pequeña victoria.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="progress-section">
+        <h2 class="section-title">El <span>Poder de la Constancia</span></h2>
+        <div class="progress-container">
+            <div class="progress-item fade-in">
+                <div class="progress-label">
+                    <span>Semanas 1-4: Fundamentos</span>
+                    <span>Creando Hábitos</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" data-width="25"></div>
+                </div>
+            </div>
+            <div class="progress-item fade-in">
+                <div class="progress-label">
+                    <span>Meses 2-3: Ganancia de Fuerza</span>
+                    <span>Progreso Visible</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" data-width="50"></div>
+                </div>
+            </div>
+            <div class="progress-item fade-in">
+                <div class="progress-label">
+                    <span>Meses 4-6: Transformación</span>
+                    <span>Cambios Importantes</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" data-width="75"></div>
+                </div>
+            </div>
+            <div class="progress-item fade-in">
+                <div class="progress-label">
+                    <span>Año 1+: Estilo de Vida</span>
+                    <span>Imparable</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" data-width="100"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2 class="section-title" style="margin-bottom: 30px;">Hoy es el <span>Día Uno</span></h2>
+        <p style="max-width: 600px; margin: 0 auto 40px; color: #ccc; line-height: 1.8; font-size: 1.1rem;">
+            La sarcopenia quiere que bajes el ritmo. Que te rindas. Que aceptes la debilidad como parte del envejecimiento. 
+            <strong style="color: #ffbe0b;">Niégate.</strong> Cada fibra muscular que salvas es un día de independencia que ganas.
+        </p>
+        <a
