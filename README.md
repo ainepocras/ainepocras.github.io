@@ -1,2 +1,2 @@
 # ainepocras.github.io
-Fighting time effect on humans
+Fighting effect of TIME on humans
