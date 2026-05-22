@@ -80,7 +80,7 @@
             font-weight: 700;
             display: flex;
             justify-content: center;
-            gap: 2px; /* Small cushion between moving letter spans */
+            gap: 2px;
         }
 
         .interactive-word span {
@@ -281,11 +281,19 @@
             overflow: hidden;
             transition: all 0.4s ease;
             border: 1px solid rgba(255,255,255,0.05);
+            height: 100%;
         }
 
         .action-card:hover {
             transform: scale(1.03);
             border-color: rgba(255,107,53,0.3);
+        }
+
+        .action-card-link {
+            text-decoration: none;
+            display: block;
+            color: inherit;
+            outline: none;
         }
 
         .action-icon {
@@ -482,7 +490,7 @@
     </div>
 
     <section class="hero">
-        <div id="action-badge" class="pulse-badge">🎯 Fight Back</div>
+        <div id="action-badge" class="pulse-badge">🎯 FIGHT BACK AND REVERSE...</div>
         <div class="animation-wrapper">
             <h1 id="dynamic-title" class="interactive-word">
                 <span>S</span><span>a</span><span>r</span><span>c</span><span>o</span><span>p</span><span>e</span><span>n</span><span>i</span><span>a</span>
@@ -520,11 +528,15 @@
     <section class="action-section" id="action">
         <h2 class="section-title">Your <span>Battle Plan</span></h2>
         <div class="action-grid">
-            <div class="action-card fade-in">
-                <span class="action-icon">🏋️</span>
-                <h3>Resistance Training</h3>
-                <p>Lift weights, use resistance bands, or do bodyweight exercises 2-3 times per week. Progressive overload is key.</p>
-            </div>
+            
+            <a href="https://musclewiki.com/" target="_blank" rel="noopener noreferrer" class="action-card-link fade-in">
+                <div class="action-card">
+                    <span class="action-icon">🏋️</span>
+                    <h3>Resistance Training</h3>
+                    <p>Lift weights, use resistance bands, or do bodyweight exercises 2-3 times per week. Progressive overload is key.</p>
+                </div>
+            </a>
+
             <div class="action-card fade-in">
                 <span class="action-icon">🥗</span>
                 <h3>Protein Power</h3>
@@ -722,7 +734,7 @@
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // Music Toggle with Correct Path Fixed
+        // Music Toggle Control
         let isPlaying = false;
         const audio = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
@@ -747,7 +759,7 @@
             }
         });
 
-        // Smooth scroll
+        // Smooth scroll transition
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -784,9 +796,6 @@
                 // 2. Triggers exactly when the fist makes physical contact (400ms match)
                 setTimeout(() => {
                     document.body.classList.add('screen-quake');
-                    
-                    // Temporarily swap out the badge text
-                    badge.textContent = '🎯 FIGHT BACK AND REVERSE...';
 
                     // Process word rearranging properties sequence
                     letters.forEach((span, idx) => {
@@ -808,7 +817,7 @@
                         fist.style.opacity = '0';
                         fist.style.transform = 'translateX(-50%) scale(0)';
 
-                        // 4. Revert badge back to original text exactly when the fist exit concludes (1000ms duration)
+                        // 4. FIXED: Revert badge to original text exactly when the fist exit concludes (1000ms duration)
                         setTimeout(() => {
                             badge.textContent = '🎯 Fight Back';
                         }, 1000);
