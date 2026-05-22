@@ -3,36 +3,750 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ainepocras</title>
+    <title>ainepocras - Fight Sarcopenia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            text-align: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            background: #0a0a0a;
+            color: #fff;
+        }
+
+        /* Animated background particles */
+        #particles-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Hero Section */
+        .hero {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255,107,53,0.15) 0%, rgba(0,168,150,0.15) 50%, rgba(255,190,11,0.15) 100%);
         }
-        h1 { font-size: 3em; margin-bottom: 10px; }
-        p { font-size: 1.2em; opacity: 0.9; }
-        .box {
-            background: rgba(255,255,255,0.1);
-            padding: 30px;
-            border-radius: 15px;
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #ff6b35, #00a896, #ffbe0b, #ff6b35);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease infinite;
+            text-shadow: 0 0 60px rgba(255,107,53,0.3);
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            font-weight: 300;
+            color: #e0e0e0;
+            max-width: 700px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.5s forwards;
+        }
+
+        .pulse-badge {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #ff6b35, #ffbe0b);
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            animation: pulse 2s ease infinite;
+            box-shadow: 0 0 30px rgba(255,107,53,0.4);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(255,107,53,0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 50px rgba(255,107,53,0.6); }
+        }
+
+        /* Floating muscle icons */
+        .floating-icons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .float-icon {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.15;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .float-icon:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .float-icon:nth-child(2) { top: 20%; right: 15%; animation-delay: 1s; }
+        .float-icon:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 2s; }
+        .float-icon:nth-child(4) { bottom: 20%; right: 10%; animation-delay: 3s; }
+        .float-icon:nth-child(5) { top: 50%; left: 5%; animation-delay: 4s; }
+        .float-icon:nth-child(6) { top: 60%; right: 20%; animation-delay: 5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+
+        /* Stats Counter Section */
+        .stats-section {
+            padding: 80px 20px;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 100%);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
             backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 4px;
+            background: linear-gradient(90deg, #ff6b35, #00a896, #ffbe0b);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255,107,53,0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff6b35, #ffbe0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: #aaa;
+            font-weight: 400;
+        }
+
+        /* Action Cards */
+        .action-section {
+            padding: 80px 20px;
+            position: relative;
+            z-index: 1;
+            background: #0f0f1a;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 60px;
+            color: #fff;
+        }
+
+        .section-title span {
+            background: linear-gradient(135deg, #00a896, #ffbe0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .action-card {
+            background: linear-gradient(135deg, rgba(255,107,53,0.1), rgba(0,168,150,0.1));
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .action-card:hover {
+            transform: scale(1.03);
+            border-color: rgba(255,107,53,0.3);
+        }
+
+        .action-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .action-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .action-card p {
+            color: #aaa;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* Progress Bar Animation */
+        .progress-section {
+            padding: 80px 20px;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(180deg, #1a1a2e 0%, #0a0a0a 100%);
+        }
+
+        .progress-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .progress-item {
+            margin-bottom: 35px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .progress-bar-bg {
+            height: 12px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #ff6b35, #ffbe0b);
+            width: 0%;
+            transition: width 2s ease;
+            position: relative;
+        }
+
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            right: 0; top: 0;
+            width: 20px; height: 100%;
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(135deg, rgba(255,107,53,0.2), rgba(0,168,150,0.2));
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 18px 50px;
+            background: linear-gradient(135deg, #ff6b35, #ffbe0b);
+            color: #0a0a0a;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255,107,53,0.3);
+            border: none;
+            cursor: pointer;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255,107,53,0.5);
+        }
+
+        /* Music Toggle */
+        .music-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b35, #ffbe0b);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 20px rgba(255,107,53,0.4);
+            transition: all 0.3s ease;
+        }
+
+        .music-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .music-toggle.playing {
+            animation: musicPulse 1s ease infinite;
+        }
+
+        @keyframes musicPulse {
+            0%, 100% { box-shadow: 0 5px 20px rgba(255,107,53,0.4); }
+            50% { box-shadow: 0 5px 40px rgba(255,107,53,0.8); }
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.85rem;
+            position: relative;
+            z-index: 1;
+            background: #0a0a0a;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        footer a {
+            color: #ff6b35;
+            text-decoration: none;
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-grid, .action-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
+<base target="_blank">
 </head>
 <body>
-    <div class="box">
-        <h1>🎉 Hello, ainepocras!</h1>
-        <p>Your free domain <strong>ainepocras.github.io</strong> is live.</p>
-        <p>This page is hosted for free on GitHub Pages.</p>
+    <canvas id="particles-canvas"></canvas>
+
+    <div class="floating-icons">
+        <span class="float-icon">💪</span>
+        <span class="float-icon">🏋️</span>
+        <span class="float-icon">🦵</span>
+        <span class="float-icon">🏃</span>
+        <span class="float-icon">🥗</span>
+        <span class="float-icon">🧘</span>
     </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="pulse-badge">🎯 Fight Back</div>
+        <h1>Defeat Sarcopenia</h1>
+        <p class="hero-subtitle">
+            Muscle loss is not inevitable. Every rep, every step, every healthy meal is a declaration of war against weakness. 
+            <strong>You have the power to rebuild, to strengthen, to thrive.</strong>
+        </p>
+        <a href="#action" class="cta-button">Start Your Journey</a>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card fade-in">
+                <div class="stat-number" data-target="10">0</div>
+                <div class="stat-label">% Muscle Loss Per Decade After 50</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-number" data-target="30">0</div>
+                <div class="stat-label">% Risk Reduction with Regular Exercise</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-number" data-target="100">0</div>
+                <div class="stat-label">% Reversible with Proper Training</div>
+            </div>
+            <div class="stat-card fade-in">
+                <div class="stat-number" data-target="1">0</div>
+                <div class="stat-label">Day at a Time to Build Strength</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Action Section -->
+    <section class="action-section" id="action">
+        <h2 class="section-title">Your <span>Battle Plan</span></h2>
+        <div class="action-grid">
+            <div class="action-card fade-in">
+                <span class="action-icon">🏋️</span>
+                <h3>Resistance Training</h3>
+                <p>Lift weights, use resistance bands, or do bodyweight exercises 2-3 times per week. Progressive overload is key — challenge your muscles to grow stronger.</p>
+            </div>
+            <div class="action-card fade-in">
+                <span class="action-icon">🥗</span>
+                <h3>Protein Power</h3>
+                <p>Aim for 1.0-1.2g of protein per kg of body weight daily. Spread intake across meals. Include leucine-rich foods like eggs, fish, poultry, and legumes.</p>
+            </div>
+            <div class="action-card fade-in">
+                <span class="action-icon">🏃</span>
+                <h3>Move Every Day</h3>
+                <p>Walking, swimming, cycling — keep moving. Consistency beats intensity. Even 30 minutes of daily activity protects muscle and boosts vitality.</p>
+            </div>
+            <div class="action-card fade-in">
+                <span class="action-icon">😴</span>
+                <h3>Rest & Recover</h3>
+                <p>Muscles grow during rest. Prioritize 7-9 hours of quality sleep. Recovery days are not lazy days — they are growth days.</p>
+            </div>
+            <div class="action-card fade-in">
+                <span class="action-icon">🧘</span>
+                <h3>Balance & Flexibility</h3>
+                <p>Yoga, tai chi, and stretching improve stability and prevent falls. A strong body is useless without control. Train your mind-muscle connection.</p>
+            </div>
+            <div class="action-card fade-in">
+                <span class="action-icon">📊</span>
+                <h3>Track Progress</h3>
+                <p>Measure strength gains, not just weight. Take progress photos. Celebrate small wins. Data is motivation — watch yourself transform.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Progress Section -->
+    <section class="progress-section">
+        <h2 class="section-title">The <span>Power of Consistency</span></h2>
+        <div class="progress-container">
+            <div class="progress-item fade-in">
+                <div class="progress-label">
+                    <span>Week 1-4: Foundation</span>
+                    <span>Building Habits</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" data-width="25"></div>
+                </div>
+            </div>
+            <div class="progress-item fade-in">
+                <div class="progress-label">
+                    <span>Month 2-3: Strength Gains</span>
+                    <span>Visible Progress</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" data-width="50"></div>
+                </div>
+            </div>
+            <div class="progress-item fade-in">
+                <div class="progress-label">
+                    <span>Month 4-6: Transformation</span>
+                    <span>Major Changes</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" data-width="75"></div>
+                </div>
+            </div>
+            <div class="progress-item fade-in">
+                <div class="progress-label">
+                    <span>Year 1+: Lifestyle</span>
+                    <span>Unstoppable</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" data-width="100"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2 class="section-title" style="margin-bottom: 30px;">Today is <span>Day One</span></h2>
+        <p style="max-width: 600px; margin: 0 auto 40px; color: #ccc; line-height: 1.8; font-size: 1.1rem;">
+            Sarcopenia wants you to slow down. To give up. To accept weakness as aging. 
+            <strong style="color: #ffbe0b;">Refuse.</strong> Every muscle fiber you save is a day of independence you gain. 
+            Every rep is a vote for the future you want.
+        </p>
+        <a href="#action" class="cta-button">I Choose Strength 💪</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>Built with 💪 by <a href="https://github.com/ainepocras">ainepocras</a> | Fight Sarcopenia | Every Day Counts</p>
+        <p style="margin-top: 10px; font-size: 0.75rem; color: #444;">
+            This page is for inspirational purposes. Always consult a healthcare professional before starting any exercise program.
+        </p>
+    </footer>
+
+    <!-- Music Toggle -->
+    <button class="music-toggle" id="musicBtn" title="Toggle Motivational Music">🎵</button>
+
+    <script>
+        // Particles Background
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 80;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+                this.color = `rgba(${255}, ${107 + Math.random() * 100}, ${53 + Math.random() * 100}, ${Math.random() * 0.3 + 0.1})`;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            // Draw connections
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 100) {
+                        ctx.strokeStyle = `rgba(255, 107, 53, ${0.1 * (1 - distance / 100)})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Scroll Animations
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+
+                    // Animate numbers
+                    if (entry.target.querySelector('.stat-number')) {
+                        const numEl = entry.target.querySelector('.stat-number');
+                        const target = parseInt(numEl.dataset.target);
+                        let current = 0;
+                        const increment = target / 50;
+                        const timer = setInterval(() => {
+                            current += increment;
+                            if (current >= target) {
+                                numEl.textContent = target + (target === 1 ? '' : '+');
+                                clearInterval(timer);
+                            } else {
+                                numEl.textContent = Math.floor(current) + (target === 1 ? '' : '+');
+                            }
+                        }, 30);
+                    }
+
+                    // Animate progress bars
+                    if (entry.target.querySelector('.progress-bar-fill')) {
+                        const bar = entry.target.querySelector('.progress-bar-fill');
+                        setTimeout(() => {
+                            bar.style.width = bar.dataset.width + '%';
+                        }, 200);
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Music (Web Audio API - generates motivational ambient sound)
+        let audioContext = null;
+        let oscillators = [];
+        let isPlaying = false;
+        let gainNode = null;
+
+        function createMotivationalMusic() {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            gainNode = audioContext.createGain();
+            gainNode.gain.value = 0.08;
+            gainNode.connect(audioContext.destination);
+
+            const frequencies = [261.63, 329.63, 392.00, 523.25]; // C major chord
+            const lfoFrequencies = [0.1, 0.15, 0.12, 0.08];
+
+            frequencies.forEach((freq, i) => {
+                const osc = audioContext.createOscillator();
+                const lfo = audioContext.createOscillator();
+                const lfoGain = audioContext.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+
+                lfo.type = 'sine';
+                lfo.frequency.value = lfoFrequencies[i];
+                lfoGain.gain.value = 2;
+
+                lfo.connect(lfoGain);
+                lfoGain.connect(osc.frequency);
+                osc.connect(gainNode);
+
+                osc.start();
+                lfo.start();
+                oscillators.push({ osc, lfo });
+            });
+
+            // Add a rhythmic pulse
+            const pulseOsc = audioContext.createOscillator();
+            const pulseGain = audioContext.createGain();
+            pulseOsc.type = 'triangle';
+            pulseOsc.frequency.value = 65.41;
+            pulseGain.gain.value = 0.03;
+
+            // Create rhythmic pattern
+            const pattern = [1, 0, 0.5, 0, 1, 0.5, 0, 0.5];
+            let patternIndex = 0;
+
+            setInterval(() => {
+                pulseGain.gain.value = pattern[patternIndex] * 0.04;
+                patternIndex = (patternIndex + 1) % pattern.length;
+            }, 250);
+
+            pulseOsc.connect(pulseGain);
+            pulseGain.connect(audioContext.destination);
+            pulseOsc.start();
+            oscillators.push({ osc: pulseOsc, lfo: null });
+        }
+
+        function stopMusic() {
+            oscillators.forEach(({ osc, lfo }) => {
+                try { osc.stop(); } catch(e) {}
+                if (lfo) try { lfo.stop(); } catch(e) {}
+            });
+            oscillators = [];
+            if (audioContext) audioContext.close();
+            audioContext = null;
+        }
+
+        document.getElementById('musicBtn').addEventListener('click', function() {
+            if (!isPlaying) {
+                createMotivationalMusic();
+                this.classList.add('playing');
+                this.textContent = '🔊';
+                isPlaying = true;
+            } else {
+                stopMusic();
+                this.classList.remove('playing');
+                this.textContent = '🎵';
+                isPlaying = false;
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
