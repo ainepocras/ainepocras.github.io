@@ -62,18 +62,6 @@
     0% { transform: translate(2px, 1px) rotate(0deg); }
     100% { transform: translate(-1px, -2px) rotate(0.5deg); }
 }
-
-/* Global modifications for clickable layouts */
-.action-card-link {
-    text-decoration: none;
-    display: block;
-    color: inherit;
-    outline: none;
-}
-
-.action-card {
-    height: 100%;
-}
     </style>
 </head>
 <body>
@@ -97,7 +85,7 @@
     </div>
 
     <section class="hero">
-        <div id="action-badge" class="pulse-badge">🎯 FIGHT BACK AND REVERSE...</div>
+        <div class="pulse-badge">🎯 Fight Back</div>
         <div class="animation-wrapper">
     <h1 id="dynamic-title" class="interactive-word">
         <span>S</span><span>a</span><span>r</span><span>c</span><span>o</span><span>p</span><span>e</span><span>n</span><span>i</span><span>a</span>
@@ -135,23 +123,16 @@
     <section class="action-section" id="action">
         <h2 class="section-title">Your <span>Battle Plan</span></h2>
         <div class="action-grid">
-            
-            <a href="https://musclewiki.com/" target="_blank" rel="noopener noreferrer" class="action-card-link fade-in">
-                <div class="action-card">
-                    <span class="action-icon">🏋️</span>
-                    <h3>Resistance Training</h3>
-                    <p>Lift weights, use resistance bands, or do bodyweight exercises 2-3 times per week. Progressive overload is key.</p>
-                </div>
-            </a>
-
-            <a href="https://www.calculator.net/protein-calculator.html?cage=59&csex=m&cheightfeet=5&cheightinch=10&cpound=160&cheightmeter=180&ckg=85&cactivity=1.55&cmop=0&cformula=m&cfatpct=20&printit=0&ctype=metric&x=Calculate" target="_blank" rel="noopener noreferrer" class="action-card-link fade-in">
-                <div class="action-card">
-                    <span class="action-icon">🥗</span>
-                    <h3>Protein Power</h3>
-                    <p>Aim for 1.0-1.2g of protein per kg of body weight daily. Spread intake across meals.</p>
-                </div>
-            </a>
-
+            <div class="action-card fade-in">
+                <span class="action-icon">🏋️</span>
+                <h3>Resistance Training</h3>
+                <p>Lift weights, use resistance bands, or do bodyweight exercises 2-3 times per week. Progressive overload is key.</p>
+            </div>
+            <div class="action-card fade-in">
+                <span class="action-icon">🥗</span>
+                <h3>Protein Power</h3>
+                <p>Aim for 1.0-1.2g of protein per kg of body weight daily. Spread intake across meals.</p>
+            </div>
             <div class="action-card fade-in">
                 <span class="action-icon">🏃</span>
                 <h3>Move Every Day</h3>
@@ -377,66 +358,6 @@
                     behavior: 'smooth'
                 });
             });
-        });
-
-        // Fist animation & dynamic badge text changer logic
-        window.addEventListener('DOMContentLoaded', () => {
-            const fist = document.getElementById('fist-striker');
-            const title = document.getElementById('dynamic-title');
-            const badge = document.getElementById('action-badge');
-            const letters = title.querySelectorAll('span');
-
-            const transformationMap = [
-                { index: 0, text: 'a' },
-                { index: 1, text: 'i' },
-                { index: 2, text: 'n' },
-                { index: 3, text: 'e' },
-                { index: 4, text: 'p' },
-                { index: 5, text: 'o' },
-                { index: 6, text: 'c' },
-                { index: 7, text: 'r' },
-                { index: 8, text: 'a' },
-                { index: 9, text: 's' }
-            ];
-
-            // 1. Initial trigger after 3 seconds of load time
-            setTimeout(() => {
-                fist.classList.add('strike'); // Fist drops from top
-
-                // 2. Triggers exactly when the fist makes physical contact (400ms match)
-                setTimeout(() => {
-                    document.body.classList.add('screen-quake');
-
-                    // Process word rearranging properties sequence
-                    letters.forEach((span, idx) => {
-                        span.textContent = transformationMap[idx].text;
-                        if (idx === 0) {
-                            span.textContent = 'A';
-                        }
-                    });
-
-                    // Terminate the heavy screen-quake feedback
-                    setTimeout(() => {
-                        document.body.classList.remove('screen-quake');
-                    }, 400);
-
-                    // 3. Keep the fist resting on scene (2500ms hold time duration)
-                    setTimeout(() => {
-                        fist.style.transition = 'top 1s ease, opacity 1s ease, transform 1s ease';
-                        fist.style.top = '-150px';
-                        fist.style.opacity = '0';
-                        fist.style.transform = 'translateX(-50%) scale(0)';
-
-                        // 4. Revert badge to original text exactly when the fist exit concludes (1000ms duration)
-                        setTimeout(() => {
-                            badge.textContent = '🎯 Fight Back';
-                        }, 1000);
-
-                    }, 2500);
-
-                }, 400);
-
-            }, 3000);
         });
     </script>
 </body>
