@@ -553,4 +553,161 @@
             La sarcopenia quiere que bajes el ritmo. Que te rindas. Que aceptes la debilidad como parte del envejecimiento. 
             <strong style="color: #ffbe0b;">Niégate.</strong> Cada fibra muscular que salvas es un día de independencia que ganas.
         </p>
-        <a
+        <a href="#action" class="cta-button">Elijo la Fuerza 💪</a>
+    </section>
+
+    <footer>
+        <p>Creado con 💪 por <a href="https://github.com/ainepocras">ainepocras</a> | Combate la Sarcopenia | Cada Día Cuenta</p>
+        <p style="margin-top: 10px; font-size: 0.75rem; color: #444;">
+            Esta página tiene fines inspiracionales. Consulta siempre a un profesional de la salud antes de comenzar cualquier programa de ejercicios.
+        </p>
+    </footer>
+
+    <audio id="bgMusic" loop>
+        <source src="synthwave.mp3" type="audio/mpeg">
+    </audio>
+
+    <button class="music-toggle" id="musicBtn" title="Activar Música Motivacional">🎵</button>
+
+    <script>
+        // Particles Background
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 80;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+                this.color = `rgba(${255}, ${107 + Math.random() * 100}, ${53 + Math.random() * 100}, ${Math.random() * 0.3 + 0.1})`;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 100) {
+                        ctx.strokeStyle = `rgba(255, 107, 53, ${0.1 * (1 - distance / 100)})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Scroll Animations
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    if (entry.target.querySelector('.stat-number')) {
+                        const numEl = entry.target.querySelector('.stat-number');
+                        const target = parseInt(numEl.dataset.target);
+                        let current = 0;
+                        const increment = target / 50;
+                        const timer = setInterval(() => {
+                            current += increment;
+                            if (current >= target) {
+                                numEl.textContent = target + (target === 1 ? '' : '+');
+                                clearInterval(timer);
+                            } else {
+                                numEl.textContent = Math.floor(current) + (target === 1 ? '' : '+');
+                            }
+                        }, 30);
+                    }
+                    
+                    if (entry.target.querySelector('.progress-bar-fill')) {
+                        const bar = entry.target.querySelector('.progress-bar-fill');
+                        setTimeout(() => {
+                            bar.style.width = bar.dataset.width + '%';
+                        }, 200);
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Music Toggle
+        let isPlaying = false;
+        const audio = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+
+        musicBtn.addEventListener('click', function() {
+            if (!isPlaying) {
+                audio.volume = 0.3;
+                audio.play().then(() => {
+                    this.classList.add('playing');
+                    this.textContent = '🔊';
+                    isPlaying = true;
+                }).catch(e => {
+                    console.log('Audio play failed:', e);
+                    alert('No se pudo reproducir el audio. Por favor verifica que synthwave.mp3 exista en la carpeta raíz.');
+                });
+            } else {
+                audio.pause();
+                audio.currentTime = 0;
+                this.classList.remove('playing');
+                this.textContent = '🎵';
+                isPlaying = false;
+            }
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
