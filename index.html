@@ -16,6 +16,35 @@
             color: #fff;
         }
 
+        /* Language Switcher Styling */
+        .lang-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+        }
+        
+        .lang-switcher select {
+            background: rgba(10, 10, 10, 0.8);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            outline: none;
+            transition: border-color 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+        
+        .lang-switcher select:hover {
+            border-color: #ff6b35;
+        }
+
         #particles-canvas {
             position: fixed;
             top: 0; left: 0;
@@ -37,24 +66,66 @@
             background: linear-gradient(135deg, rgba(255,107,53,0.15) 0%, rgba(0,168,150,0.15) 50%, rgba(255,190,11,0.15) 100%);
         }
 
-        .hero h1 {
+        /* Custom Word Rearrangement Animation Layout */
+        .animation-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+            perspective: 1000px;
+        }
+
+        .interactive-word {
             font-family: 'Playfair Display', serif;
             font-size: clamp(2.5rem, 6vw, 5rem);
             font-weight: 700;
-            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 2px;
+        }
+
+        .interactive-word span {
+            display: inline-block;
+            position: relative;
+            transition: transform 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.5s ease;
             background: linear-gradient(90deg, #ff6b35, #00a896, #ffbe0b, #ff6b35);
             background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: gradientShift 4s ease infinite;
-            text-shadow: 0 0 60px rgba(255,107,53,0.3);
         }
 
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
+        }
+
+        .fist-emoji {
+            position: absolute;
+            top: -150px;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            font-size: clamp(3rem, 8vw, 6rem);
+            z-index: 10;
+            pointer-events: none;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), top 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+        }
+
+        /* Impact State for Fist Drop */
+        .fist-emoji.strike {
+            top: 0px;
+            transform: translateX(-50%) scale(1.3);
+        }
+
+        /* Screen shake effect on impact */
+        .screen-quake {
+            animation: quake 0.15s ease-in-out infinite alternate;
+        }
+
+        @keyframes quake {
+            0% { transform: translate(2px, 1px) rotate(0deg); }
+            100% { transform: translate(-1px, -2px) rotate(0.5deg); }
         }
 
         .hero-subtitle {
@@ -80,6 +151,7 @@
             margin-bottom: 30px;
             animation: pulse 2s ease infinite;
             box-shadow: 0 0 30px rgba(255,107,53,0.4);
+            transition: all 0.3s ease;
         }
 
         @keyframes pulse {
@@ -209,6 +281,7 @@
             overflow: hidden;
             transition: all 0.4s ease;
             border: 1px solid rgba(255,255,255,0.05);
+            height: 100%;
         }
 
         .action-card:hover {
@@ -390,6 +463,14 @@
     </style>
 </head>
 <body>
+    <div class="lang-switcher">
+        <select onchange="location = this.value;">
+            <option value="index.html" selected>🇬🇧 EN</option>
+            <option value="es.html">🇪🇸 ES</option>
+            <option value="nl.html">🇳🇱 NL</option>
+        </select>
+    </div>
+
     <canvas id="particles-canvas"></canvas>
 
     <div class="floating-icons">
@@ -402,8 +483,13 @@
     </div>
 
     <section class="hero">
-        <div class="pulse-badge">🎯 Fight Back</div>
-        <h1>Defeat Sarcopenia</h1>
+        <div id="action-badge" class="pulse-badge">🎯 FIGHT BACK AND REVERSE...</div>
+        <div class="animation-wrapper">
+            <h1 id="dynamic-title" class="interactive-word">
+                <span>S</span><span>a</span><span>r</span><span>c</span><span>o</span><span>p</span><span>e</span><span>n</span><span>i</span><span>a</span>
+            </h1>
+            <div id="fist-striker" class="fist-emoji">👊</div>
+        </div>
         <p class="hero-subtitle">
             Muscle loss is not inevitable. Every rep, every step, every healthy meal is a declaration of war against weakness. 
             <strong>You have the power to rebuild, to strengthen, to thrive.</strong>
@@ -526,9 +612,8 @@
         </p>
     </footer>
 
-    <!-- Hidden Audio Element for Music -->
     <audio id="bgMusic" loop>
-        <source src="motivation.mp3" type="audio/mpeg">
+        <source src="synthwave.mp3" type="audio/mpeg">
     </audio>
 
     <button class="music-toggle" id="musicBtn" title="Toggle Motivational Music">🎵</button>
@@ -638,12 +723,12 @@
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // Music Toggle with Audio File
+        // Music Toggle Control
         let isPlaying = false;
         const audio = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
 
-        document.getElementById('musicBtn').addEventListener('click', function() {
+        musicBtn.addEventListener('click', function() {
             if (!isPlaying) {
                 audio.volume = 0.3;
                 audio.play().then(() => {
@@ -652,7 +737,7 @@
                     isPlaying = true;
                 }).catch(e => {
                     console.log('Audio play failed:', e);
-                    alert('Music file not found. Please upload motivation.mp3 to your repository.');
+                    alert('Could not play audio. Please verify synthwave.mp3 exists in your root folder.');
                 });
             } else {
                 audio.pause();
@@ -663,7 +748,7 @@
             }
         });
 
-        // Smooth scroll
+        // Smooth scroll transition
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -671,6 +756,66 @@
                     behavior: 'smooth'
                 });
             });
+        });
+
+        // Fist animation & dynamic badge text changer logic
+        window.addEventListener('DOMContentLoaded', () => {
+            const fist = document.getElementById('fist-striker');
+            const title = document.getElementById('dynamic-title');
+            const badge = document.getElementById('action-badge');
+            const letters = title.querySelectorAll('span');
+
+            const transformationMap = [
+                { index: 0, text: 'a' },
+                { index: 1, text: 'i' },
+                { index: 2, text: 'n' },
+                { index: 3, text: 'e' },
+                { index: 4, text: 'p' },
+                { index: 5, text: 'o' },
+                { index: 6, text: 'c' },
+                { index: 7, text: 'r' },
+                { index: 8, text: 'a' },
+                { index: 9, text: 's' }
+            ];
+
+            // 1. Initial trigger after 3 seconds of load time
+            setTimeout(() => {
+                fist.classList.add('strike'); // Fist drops from top
+
+                // 2. Triggers exactly when the fist makes physical contact (400ms match)
+                setTimeout(() => {
+                    document.body.classList.add('screen-quake');
+
+                    // Process word rearranging properties sequence
+                    letters.forEach((span, idx) => {
+                        span.textContent = transformationMap[idx].text;
+                        if (idx === 0) {
+                            span.textContent = 'A';
+                        }
+                    });
+
+                    // Terminate the heavy screen-quake feedback
+                    setTimeout(() => {
+                        document.body.classList.remove('screen-quake');
+                    }, 400);
+
+                    // 3. Keep the fist resting on scene (2500ms hold time duration)
+                    setTimeout(() => {
+                        fist.style.transition = 'top 1s ease, opacity 1s ease, transform 1s ease';
+                        fist.style.top = '-150px';
+                        fist.style.opacity = '0';
+                        fist.style.transform = 'translateX(-50%) scale(0)';
+
+                        // 4. Revert badge back to original text precisely as the fist finishes exiting (1000ms duration)
+                        setTimeout(() => {
+                            badge.textContent = '🎯 Fight Back';
+                        }, 1000);
+
+                    }, 2500);
+
+                }, 400);
+
+            }, 3000);
         });
     </script>
 </body>
