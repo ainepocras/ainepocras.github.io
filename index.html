@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ainepocras - Fight Sarcopenia</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght=300;400;600;700;900&family=Playfair+Display:wght=700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -174,12 +174,31 @@
             animation: float 8s ease-in-out infinite;
         }
 
-        .float-icon:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
-        .float-icon:nth-child(2) { top: 20%; right: 15%; animation-delay: 1s; }
-        .float-icon:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 2s; }
-        .float-icon:nth-child(4) { bottom: 20%; right: 10%; animation-delay: 3s; }
-        .float-icon:nth-child(5) { top: 50%; left: 5%; animation-delay: 4s; }
-        .float-icon:nth-child(6) { top: 60%; right: 20%; animation-delay: 5s; }
+        /* Subtle floating word style */
+        .float-text {
+            position: absolute;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #fff;
+            opacity: 0.08;
+            white-space: nowrap;
+            pointer-events: none;
+            animation: float 10s ease-in-out infinite;
+        }
+
+        .float-icon:nth-child(1), .float-text:nth-child(7) { top: 10%; left: 10%; animation-delay: 0s; }
+        .float-icon:nth-child(2), .float-text:nth-child(8) { top: 20%; right: 15%; animation-delay: 1s; }
+        .float-icon:nth-child(3), .float-text:nth-child(9) { bottom: 30%; left: 20%; animation-delay: 2s; }
+        .float-icon:nth-child(4), .float-text:nth-child(10) { bottom: 20%; right: 10%; animation-delay: 3s; }
+        .float-icon:nth-child(5), .float-text:nth-child(11) { top: 50%; left: 5%; animation-delay: 4s; }
+        .float-icon:nth-child(6), .float-text:nth-child(12) { top: 60%; right: 20%; animation-delay: 5s; }
+        
+        .float-text:nth-child(13) { top: 35%; left: 40%; animation-delay: 1.5s; }
+        .float-text:nth-child(14) { bottom: 45%; right: 45%; animation-delay: 3.5s; }
+        .float-text:nth-child(15) { top: 75%; left: 15%; animation-delay: 2.5s; }
 
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -480,6 +499,17 @@
         <span class="float-icon">🏃</span>
         <span class="float-icon">🥗</span>
         <span class="float-icon">🧘</span>
+        
+        <!-- Subtle Floating Word Repeating Nodes -->
+        <span class="float-text">Ainepocras</span>
+        <span class="float-text">Ainepocras</span>
+        <span class="float-text">Ainepocras</span>
+        <span class="float-text">Ainepocras</span>
+        <span class="float-text">Ainepocras</span>
+        <span class="float-text">Ainepocras</span>
+        <span class="float-text">Ainepocras</span>
+        <span class="float-text">Ainepocras</span>
+        <span class="float-text">Ainepocras</span>
     </div>
 
     <section class="hero">
