@@ -418,7 +418,7 @@
             border: none;
             cursor: pointer;
             letter-spacing: 1px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
         .cta-button:hover {
@@ -426,15 +426,27 @@
             box-shadow: 0 20px 40px rgba(255,107,53,0.5);
         }
 
-        .cta-image {
-            display: block;
+        /* Image styling container to fix display issues */
+        .image-display-container {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .tshirt-preview-img {
             max-width: 100%;
-            width: 450px;
+            width: 400px;
             height: auto;
-            margin: 20px auto 0;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.4s ease;
+        }
+
+        .tshirt-preview-img:hover {
+            transform: scale(1.02);
         }
 
         .music-toggle {
@@ -505,8 +517,8 @@
             .stats-grid, .action-grid {
                 grid-template-columns: 1fr;
             }
-            .cta-image {
-                width: 100%;
+            .tshirt-preview-img {
+                width: 90%;
             }
         }
     </style>
@@ -595,21 +607,21 @@
                 <h3>Move Every Day</h3>
                 <p>Walking, swimming, cycling — keep moving. Consistency beats intensity.</p>
             </a>
-            <a href="https://www.youtube.com/results?search_query=Rest+%26+Recover+Muscles+grow+during+rest.+Prioritize+7-9+hours+of+quality+sleep." target="_blank" rel="noopener noreferrer" class="action-card clickable-card fade-in">
+            <div class="action-card fade-in">
                 <span class="action-icon">😴</span>
                 <h3>Rest & Recover</h3>
                 <p>Muscles grow during rest. Prioritize 7-9 hours of quality sleep.</p>
-            </a>
-            <a href="https://www.youtube.com/results?search_query=Balance+%26+Flexibility+Yoga%2C+tai+chi%2C+and+stretching+improve+stability+and+prevent+falls." target="_blank" rel="noopener noreferrer" class="action-card clickable-card fade-in">
+            </div>
+            <div class="action-card fade-in">
                 <span class="action-icon">🧘</span>
                 <h3>Balance & Flexibility</h3>
                 <p>Yoga, tai chi, and stretching improve stability and prevent falls.</p>
-            </a>
-            <a href="https://www.youtube.com/results?search_query=Track+Progress+Measure+strength+gains%2C+not+just+weight.+Celebrate+small+wins." target="_blank" rel="noopener noreferrer" class="action-card clickable-card fade-in">
+            </div>
+            <div class="action-card fade-in">
                 <span class="action-icon">📊</span>
                 <h3>Track Progress</h3>
                 <p>Measure strength gains, not just weight. Celebrate small wins.</p>
-            </a>
+            </div>
         </div>
     </section>
 
@@ -662,7 +674,10 @@
             <strong style="color: #ffbe0b;">Refuse.</strong> Every muscle fiber you save is a day of independence you gain.
         </p>
         <a href="#action" class="cta-button">I Choose Strength 💪</a>
-        <img src="ainepocras.png" alt="Ainepocras T-Shirt Preview" class="cta-image fade-in">
+        
+        <div class="image-display-container fade-in">
+            <img src="./ainepocras.png" alt="Ainepocras T-Shirt Preview" class="tshirt-preview-img">
+        </div>
     </section>
 
     <footer>
