@@ -308,6 +308,16 @@
             border-color: rgba(255,107,53,0.3);
         }
 
+        /* Make whole card clickable or stylized nicely if linked */
+        .action-card.clickable-card {
+            text-decoration: none;
+            display: block;
+        }
+
+        .action-card.clickable-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 168, 150, 0.2);
+        }
+
         .action-icon {
             font-size: 3rem;
             margin-bottom: 20px;
@@ -318,6 +328,11 @@
             font-size: 1.3rem;
             margin-bottom: 15px;
             color: #fff;
+            transition: color 0.3s ease;
+        }
+
+        .action-card.clickable-card:hover h3 {
+            color: #ffbe0b;
         }
 
         .action-card p {
@@ -551,21 +566,21 @@
     <section class="action-section" id="action">
         <h2 class="section-title">Your <span>Battle Plan</span></h2>
         <div class="action-grid">
-            <div class="action-card fade-in">
+            <a href="https://musclewiki.com/" target="_blank" rel="noopener noreferrer" class="action-card clickable-card fade-in">
                 <span class="action-icon">🏋️</span>
                 <h3>Resistance Training</h3>
                 <p>Lift weights, use resistance bands, or do bodyweight exercises 2-3 times per week. Progressive overload is key.</p>
-            </div>
-            <div class="action-card fade-in">
+            </a>
+            <a href="https://www.calculator.net/protein-calculator.html" target="_blank" rel="noopener noreferrer" class="action-card clickable-card fade-in">
                 <span class="action-icon">🥗</span>
                 <h3>Protein Power</h3>
                 <p>Aim for 1.0-1.2g of protein per kg of body weight daily. Spread intake across meals.</p>
-            </div>
-            <div class="action-card fade-in">
+            </a>
+            <a href="https://www.youtube.com/shorts/tZUC-uAGLEA" target="_blank" rel="noopener noreferrer" class="action-card clickable-card fade-in">
                 <span class="action-icon">🏃</span>
                 <h3>Move Every Day</h3>
                 <p>Walking, swimming, cycling — keep moving. Consistency beats intensity.</p>
-            </div>
+            </a>
             <div class="action-card fade-in">
                 <span class="action-icon">😴</span>
                 <h3>Rest & Recover</h3>
@@ -781,10 +796,12 @@
         // Smooth scroll transition
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                if(this.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
             });
         });
 
