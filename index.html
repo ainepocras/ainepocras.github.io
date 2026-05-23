@@ -418,11 +418,23 @@
             border: none;
             cursor: pointer;
             letter-spacing: 1px;
+            margin-bottom: 40px;
         }
 
         .cta-button:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 40px rgba(255,107,53,0.5);
+        }
+
+        .cta-image {
+            display: block;
+            max-width: 100%;
+            width: 450px;
+            height: auto;
+            margin: 20px auto 0;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .music-toggle {
@@ -492,6 +504,9 @@
         @media (max-width: 768px) {
             .stats-grid, .action-grid {
                 grid-template-columns: 1fr;
+            }
+            .cta-image {
+                width: 100%;
             }
         }
     </style>
@@ -647,6 +662,7 @@
             <strong style="color: #ffbe0b;">Refuse.</strong> Every muscle fiber you save is a day of independence you gain.
         </p>
         <a href="#action" class="cta-button">I Choose Strength 💪</a>
+        <img src="ainepocras.png" alt="Ainepocras T-Shirt Preview" class="cta-image fade-in">
     </section>
 
     <footer>
