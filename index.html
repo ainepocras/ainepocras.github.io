@@ -53,11 +53,11 @@
             pointer-events: none;
         }
 
-        /* Side-by-side Split View Layout Configuration */
+        /* Side-by-side Layout: Configured to 1/3 (video) and 2/3 (content) */
         .hero {
             min-height: 100vh;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 2fr;
             align-items: center;
             position: relative;
             z-index: 1;
@@ -66,7 +66,7 @@
             background: linear-gradient(135deg, rgba(255,107,53,0.15) 0%, rgba(0,168,150,0.15) 50%, rgba(255,190,11,0.15) 100%);
         }
 
-        /* Left Column: Embedded Player Container */
+        /* Left Column: Embedded Player Container occupying 1/3 width */
         .video-container {
             width: 100%;
             display: flex;
@@ -78,7 +78,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             background: #000;
             position: relative;
-            aspect-ratio: 16/9;
+            aspect-ratio: 9/16; /* Retaining vertical video portrait ratio alignment */
         }
 
         .video-container video {
@@ -87,7 +87,53 @@
             object-fit: cover;
         }
 
-        /* Right Column: Hero Branding Copy Section */
+        /* Audio overlay button to bypass browser restriction rules */
+        .audio-unmute-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+            cursor: pointer;
+            transition: opacity 0.4s ease;
+        }
+
+        .audio-unmute-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .audio-btn-circle {
+            width: 70px; height: 70px;
+            background: linear-gradient(135deg, #ff6b35, #ffbe0b);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            box-shadow: 0 0 25px rgba(255,107,53,0.6);
+            margin-bottom: 15px;
+            animation: pulseMini 2s infinite;
+        }
+
+        .audio-unmute-overlay p {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        @keyframes pulseMini {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        /* Right Column: Hero Branding Copy Section occupying 2/3 width */
         .hero-content {
             display: flex;
             flex-direction: column;
@@ -107,7 +153,7 @@
 
         .interactive-word {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(2.5rem, 4vw, 4.5rem);
+            font-size: clamp(2.5rem, 5vw, 5.5rem);
             font-weight: 700;
             display: flex;
             justify-content: center;
@@ -164,7 +210,7 @@
             font-size: clamp(0.95rem, 2vw, 1.25rem);
             font-weight: 300;
             color: #e0e0e0;
-            max-width: 600px;
+            max-width: 650px;
             margin-bottom: 40px;
             line-height: 1.6;
             opacity: 0;
@@ -542,14 +588,14 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Responsiveness breakdown overrides for standard grid splits */
-        @media (max-width: 900px) {
+        /* Responsiveness view changes */
+        @media (max-width: 950px) {
             .hero {
                 grid-template-columns: 1fr;
                 padding-top: 100px;
             }
             .video-container {
-                max-width: 500px;
+                max-width: 340px;
                 margin: 0 auto;
             }
         }
@@ -596,7 +642,12 @@
 
     <section class="hero">
         <div class="video-container">
-            <video autoplay loop muted playsinline>
+            <div class="audio-unmute-overlay" id="audioOverlay">
+                <div class="audio-btn-circle">🔊</div>
+                <p>Play with Audio</p>
+            </div>
+            
+            <video id="trainVideo" loop playsinline>
                 <source src="Short_Train.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
@@ -744,6 +795,22 @@
     <button class="music-toggle" id="musicBtn" title="Toggle Motivational Music">🎵</button>
 
     <script>
+        // Interactive Audio Overlay Controller
+        const video = document.getElementById('trainVideo');
+        const audioOverlay = document.getElementById('audioOverlay');
+
+        // Autoplay initial muted baseline stream
+        video.muted = true;
+        video.play().catch(err => console.log("Autoplay context initialization pending..."));
+
+        audioOverlay.addEventListener('click', () => {
+            audioOverlay.classList.add('hidden');
+            video.muted = false; // Enable audio stream track channel
+            video.currentTime = 0; // Restart video clip from beginning
+            video.setAttribute('controls', 'true'); // Provide timeline controls for the user
+            video.play();
+        });
+
         // Particles Background
         const canvas = document.getElementById('particles-canvas');
         const ctx = canvas.getContext('2d');
