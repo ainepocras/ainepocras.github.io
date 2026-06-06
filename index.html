@@ -53,82 +53,72 @@
             pointer-events: none;
         }
 
+        /* Side-by-side Split View Layout Configuration */
         .hero {
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             align-items: center;
             position: relative;
             z-index: 1;
-            text-align: center;
-            padding: 20px;
+            padding: 40px;
+            gap: 40px;
             background: linear-gradient(135deg, rgba(255,107,53,0.15) 0%, rgba(0,168,150,0.15) 50%, rgba(255,190,11,0.15) 100%);
         }
 
-        /* Custom Word Layout */
-        .animation-wrapper {
+        /* Left Column: Embedded Player Container */
+        .video-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #000;
             position: relative;
+            aspect-ratio: 16/9;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Right Column: Hero Branding Copy Section */
+        .hero-content {
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Custom Word Rearrangement Animation Layout */
+        .animation-wrapper {
+            position: relative;
+            display: inline-block;
             margin-bottom: 20px;
             perspective: 1000px;
         }
 
         .interactive-word {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-size: clamp(2.5rem, 4vw, 4.5rem);
             font-weight: 700;
             display: flex;
             justify-content: center;
             gap: 2px;
             position: relative;
-            transition: all 0.5s ease;
         }
 
-        /* Line-through effect for Sarcopenia */
-        .interactive-word::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            width: 0;
-            height: 6px;
-            background: #ff6b35;
-            transform: translateY(-50%);
-            transition: width 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border-radius: 4px;
-            box-shadow: 0 0 10px rgba(255,107,53,0.8);
-        }
-
-        .interactive-word.crossed::after {
-            width: 100%;
-        }
-
-        /* New Sub-Word Style */
-        .sub-word {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            font-weight: 700;
-            display: flex;
-            justify-content: center;
-            gap: 2px;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-            margin-top: 10px;
-        }
-
-        .sub-word.revealed {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .interactive-word span, .sub-word span {
+        .interactive-word span {
             display: inline-block;
             position: relative;
+            transition: transform 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.5s ease;
             background: linear-gradient(90deg, #ff6b35, #00a896, #ffbe0b, #ff6b35);
             background-size: 300% 300%;
             -webkit-background-clip: text;
@@ -148,7 +138,7 @@
             top: -150px;
             left: 50%;
             transform: translateX(-50%) scale(0);
-            font-size: clamp(3rem, 8vw, 6rem);
+            font-size: clamp(3rem, 6vw, 5.5rem);
             z-index: 10;
             pointer-events: none;
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), top 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045);
@@ -171,10 +161,10 @@
         }
 
         .hero-subtitle {
-            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            font-size: clamp(0.95rem, 2vw, 1.25rem);
             font-weight: 300;
             color: #e0e0e0;
-            max-width: 700px;
+            max-width: 600px;
             margin-bottom: 40px;
             line-height: 1.6;
             opacity: 0;
@@ -187,7 +177,7 @@
             background: linear-gradient(135deg, #ff6b35, #ffbe0b);
             border-radius: 50px;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 30px;
@@ -350,10 +340,26 @@
             border-color: rgba(255,107,53,0.3);
         }
 
-        /* Make whole card clickable or stylized nicely if linked */
         .action-card.clickable-card {
             text-decoration: none;
             display: block;
+        }
+
+        .action-card.clickable-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 168, 150, 0.2);
+        }
+
+        .action-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .action-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #fff;
+            transition: color 0.3s ease;
         }
 
         .action-card.clickable-card:hover h3 {
@@ -450,7 +456,6 @@
             box-shadow: 0 20px 40px rgba(255,107,53,0.5);
         }
 
-        /* Container styles for image layouts */
         .image-display-container {
             margin-top: 40px;
             display: flex;
@@ -537,6 +542,18 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Responsiveness breakdown overrides for standard grid splits */
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding-top: 100px;
+            }
+            .video-container {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+        }
+
         @media (max-width: 768px) {
             .stats-grid, .action-grid {
                 grid-template-columns: 1fr;
@@ -578,21 +595,27 @@
     </div>
 
     <section class="hero">
-        <div id="action-badge" class="pulse-badge">🎯 FIGHT BACK AND REVERSE...</div>
-        <div class="animation-wrapper">
-            <h1 id="dynamic-title" class="interactive-word">
-                <span>S</span><span>a</span><span>r</span><span>c</span><span>o</span><span>p</span><span>e</span><span>n</span><span>i</span><span>a</span>
-            </h1>
-            <h2 id="brand-title" class="sub-word">
-                <span>A</span><span>i</span><span>n</span><span>e</span><span>p</span><span>o</span><span>c</span><span>r</span><span>a</span><span>s</span>
-            </h2>
-            <div id="fist-striker" class="fist-emoji">👊</div>
+        <div class="video-container">
+            <video autoplay loop muted playsinline>
+                <source src="Short_Train.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
         </div>
-        <p class="hero-subtitle">
-            Muscle loss is not inevitable. Every rep, every step, every healthy meal is a declaration of war against weakness. 
-            <strong>You have the power to rebuild, to strengthen, to thrive.</strong>
-        </p>
-        <a href="#action" class="cta-button">Start Your Journey</a>
+
+        <div class="hero-content">
+            <div id="action-badge" class="pulse-badge">🎯 FIGHT BACK AND REVERSE...</div>
+            <div class="animation-wrapper">
+                <h1 id="dynamic-title" class="interactive-word">
+                    <span>S</span><span>a</span><span>r</span><span>c</span><span>o</span><span>p</span><span>e</span><span>n</span><span>i</span><span>a</span>
+                </h1>
+                <div id="fist-striker" class="fist-emoji">👊</div>
+            </div>
+            <p class="hero-subtitle">
+                Muscle loss is not inevitable. Every rep, every step, every healthy meal is a declaration of war against weakness. 
+                <strong>You have the power to rebuild, to strengthen, to thrive.</strong>
+            </p>
+            <a href="#action" class="cta-button">Start Your Journey</a>
+        </div>
     </section>
 
     <section class="stats-section">
@@ -862,12 +885,25 @@
             });
         });
 
-        // Fist animation & crossover logic setup
+        // Fist animation & dynamic badge text changer logic
         window.addEventListener('DOMContentLoaded', () => {
             const fist = document.getElementById('fist-striker');
             const title = document.getElementById('dynamic-title');
-            const brandTitle = document.getElementById('brand-title');
             const badge = document.getElementById('action-badge');
+            const letters = title.querySelectorAll('span');
+
+            const transformationMap = [
+                { index: 0, text: 'a' },
+                { index: 1, text: 'i' },
+                { index: 2, text: 'n' },
+                { index: 3, text: 'e' },
+                { index: 4, text: 'p' },
+                { index: 5, text: 'o' },
+                { index: 6, text: 'c' },
+                { index: 7, text: 'r' },
+                { index: 8, text: 'a' },
+                { index: 9, text: 's' }
+            ];
 
             // 1. Initial trigger after 3 seconds of load time
             setTimeout(() => {
@@ -877,11 +913,13 @@
                 setTimeout(() => {
                     document.body.classList.add('screen-quake');
 
-                    // Apply the strike-through line directly onto "Sarcopenia" without altering characters
-                    title.classList.add('crossed');
-                    
-                    // Reveal the brand text layer right underneath
-                    brandTitle.classList.add('revealed');
+                    // Process word rearranging properties sequence
+                    letters.forEach((span, idx) => {
+                        span.textContent = transformationMap[idx].text;
+                        if (idx === 0) {
+                            span.textContent = 'A';
+                        }
+                    });
 
                     // Terminate the heavy screen-quake feedback
                     setTimeout(() => {
