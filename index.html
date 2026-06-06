@@ -53,72 +53,82 @@
             pointer-events: none;
         }
 
-        /* Side-by-side Split View Layout Configuration */
         .hero {
             min-height: 100vh;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-            padding: 40px;
-            gap: 40px;
-            background: linear-gradient(135deg, rgba(255,107,53,0.15) 0%, rgba(0,168,150,0.15) 50%, rgba(255,190,11,0.15) 100%);
-        }
-
-        /* Left Column: Embedded Player Container */
-        .video-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: #000;
-            position: relative;
-            aspect-ratio: 16/9;
-        }
-
-        .video-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* Right Column: Hero Branding Copy Section */
-        .hero-content {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            position: relative;
+            z-index: 1;
             text-align: center;
-            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255,107,53,0.15) 0%, rgba(0,168,150,0.15) 50%, rgba(255,190,11,0.15) 100%);
         }
 
-        /* Custom Word Rearrangement Animation Layout */
+        /* Custom Word Layout stacked vertically */
         .animation-wrapper {
             position: relative;
-            display: inline-block;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             margin-bottom: 20px;
             perspective: 1000px;
         }
 
         .interactive-word {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(2.5rem, 4vw, 4.5rem);
+            font-size: clamp(2.5rem, 6vw, 5rem);
             font-weight: 700;
             display: flex;
             justify-content: center;
             gap: 2px;
             position: relative;
+            transition: all 0.5s ease;
         }
 
-        .interactive-word span {
+        /* Horizontal line-through animation for Sarcopenia */
+        .interactive-word::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 0;
+            height: 6px;
+            background: #ff6b35;
+            transform: translateY(-50%);
+            transition: width 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(255,107,53,0.8);
+        }
+
+        .interactive-word.crossed::after {
+            width: 100%;
+        }
+
+        /* New Sub-Word styling for Ainepocras underneath */
+        .sub-word {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 700;
+            display: flex;
+            justify-content: center;
+            gap: 2px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            margin-top: 10px;
+        }
+
+        .sub-word.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .interactive-word span, .sub-word span {
             display: inline-block;
             position: relative;
-            transition: transform 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.5s ease;
             background: linear-gradient(90deg, #ff6b35, #00a896, #ffbe0b, #ff6b35);
             background-size: 300% 300%;
             -webkit-background-clip: text;
@@ -138,7 +148,7 @@
             top: -150px;
             left: 50%;
             transform: translateX(-50%) scale(0);
-            font-size: clamp(3rem, 6vw, 5.5rem);
+            font-size: clamp(3rem, 8vw, 6rem);
             z-index: 10;
             pointer-events: none;
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), top 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045);
@@ -161,10 +171,10 @@
         }
 
         .hero-subtitle {
-            font-size: clamp(0.95rem, 2vw, 1.25rem);
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
             font-weight: 300;
             color: #e0e0e0;
-            max-width: 600px;
+            max-width: 700px;
             margin-bottom: 40px;
             line-height: 1.6;
             opacity: 0;
@@ -177,7 +187,7 @@
             background: linear-gradient(135deg, #ff6b35, #ffbe0b);
             border-radius: 50px;
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 30px;
@@ -542,18 +552,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Responsiveness breakdown overrides for standard grid splits */
-        @media (max-width: 900px) {
-            .hero {
-                grid-template-columns: 1fr;
-                padding-top: 100px;
-            }
-            .video-container {
-                max-width: 500px;
-                margin: 0 auto;
-            }
-        }
-
         @media (max-width: 768px) {
             .stats-grid, .action-grid {
                 grid-template-columns: 1fr;
@@ -595,27 +593,21 @@
     </div>
 
     <section class="hero">
-        <div class="video-container">
-            <video autoplay loop muted playsinline>
-                <source src="Short_Train.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+        <div id="action-badge" class="pulse-badge">🎯 FIGHT BACK AND REVERSE...</div>
+        <div class="animation-wrapper">
+            <h1 id="dynamic-title" class="interactive-word">
+                <span>S</span><span>a</span><span>r</span><span>c</span><span>o</span><span>p</span><span>e</span><span>n</span><span>i</span><span>a</span>
+            </h1>
+            <h2 id="brand-title" class="sub-word">
+                <span>A</span><span>i</span><span>n</span><span>e</span><span>p</span><span>o</span><span>c</span><span>r</span><span>a</span><span>s</span>
+            </h2>
+            <div id="fist-striker" class="fist-emoji">👊</div>
         </div>
-
-        <div class="hero-content">
-            <div id="action-badge" class="pulse-badge">🎯 FIGHT BACK AND REVERSE...</div>
-            <div class="animation-wrapper">
-                <h1 id="dynamic-title" class="interactive-word">
-                    <span>S</span><span>a</span><span>r</span><span>c</span><span>o</span><span>p</span><span>e</span><span>n</span><span>i</span><span>a</span>
-                </h1>
-                <div id="fist-striker" class="fist-emoji">👊</div>
-            </div>
-            <p class="hero-subtitle">
-                Muscle loss is not inevitable. Every rep, every step, every healthy meal is a declaration of war against weakness. 
-                <strong>You have the power to rebuild, to strengthen, to thrive.</strong>
-            </p>
-            <a href="#action" class="cta-button">Start Your Journey</a>
-        </div>
+        <p class="hero-subtitle">
+            Muscle loss is not inevitable. Every rep, every step, every healthy meal is a declaration of war against weakness. 
+            <strong>You have the power to rebuild, to strengthen, to thrive.</strong>
+        </p>
+        <a href="#action" class="cta-button">Start Your Journey</a>
     </section>
 
     <section class="stats-section">
@@ -744,6 +736,24 @@
     <button class="music-toggle" id="musicBtn" title="Toggle Motivational Music">🎵</button>
 
     <script>
+        // --- 1. AUTOMATIC LANGUAGE REDIRECTION ROUTER ---
+        (function() {
+            // Read user preferred system/browser language settings
+            const userLang = navigator.language || navigator.userLanguage;
+            const lowerLang = userLang.toLowerCase();
+            
+            // Avoid looping if the user is already explicitly on a sub-language page
+            const currentFile = window.location.pathname.split("/").pop();
+            
+            if (currentFile !== "es.html" && currentFile !== "nl.html") {
+                if (lowerLang.startsWith('es')) {
+                    window.location.replace("es.html");
+                } else if (lowerLang.startsWith('nl')) {
+                    window.location.replace("nl.html");
+                }
+            }
+        })();
+
         // Particles Background
         const canvas = document.getElementById('particles-canvas');
         const ctx = canvas.getContext('2d');
@@ -885,55 +895,39 @@
             });
         });
 
-        // Fist animation & dynamic badge text changer logic
+        // --- 2. FIST IMPACT & PERMANENT STACKED VISIBILITY LOGIC ---
         window.addEventListener('DOMContentLoaded', () => {
             const fist = document.getElementById('fist-striker');
             const title = document.getElementById('dynamic-title');
+            const brandTitle = document.getElementById('brand-title');
             const badge = document.getElementById('action-badge');
-            const letters = title.querySelectorAll('span');
 
-            const transformationMap = [
-                { index: 0, text: 'a' },
-                { index: 1, text: 'i' },
-                { index: 2, text: 'n' },
-                { index: 3, text: 'e' },
-                { index: 4, text: 'p' },
-                { index: 5, text: 'o' },
-                { index: 6, text: 'c' },
-                { index: 7, text: 'r' },
-                { index: 8, text: 'a' },
-                { index: 9, text: 's' }
-            ];
-
-            // 1. Initial trigger after 3 seconds of load time
+            // Initial trigger after 3 seconds of load time
             setTimeout(() => {
-                fist.classList.add('strike'); // Fist drops from top
+                fist.classList.add('strike'); // Fist drops down
 
-                // 2. Triggers exactly when the fist makes physical contact (400ms match)
+                // Triggers exactly when the fist makes physical contact (400ms match)
                 setTimeout(() => {
                     document.body.classList.add('screen-quake');
 
-                    // Process word rearranging properties sequence
-                    letters.forEach((span, idx) => {
-                        span.textContent = transformationMap[idx].text;
-                        if (idx === 0) {
-                            span.textContent = 'A';
-                        }
-                    });
+                    // Apply horizontal line cross-over onto Sarcopenia
+                    title.classList.add('crossed');
+                    
+                    // Reveal the brand text layer right underneath it
+                    brandTitle.classList.add('revealed');
 
-                    // Terminate the heavy screen-quake feedback
+                    // Terminate the heavy screen-quake feedback animation
                     setTimeout(() => {
                         document.body.classList.remove('screen-quake');
                     }, 400);
 
-                    // 3. Keep the fist resting on scene (2500ms hold time duration)
+                    // Retract the fist away safely after resting on scene
                     setTimeout(() => {
                         fist.style.transition = 'top 1s ease, opacity 1s ease, transform 1s ease';
                         fist.style.top = '-150px';
                         fist.style.opacity = '0';
                         fist.style.transform = 'translateX(-50%) scale(0)';
 
-                        // 4. Revert badge back to original text precisely as the fist finishes exiting (1000ms duration)
                         setTimeout(() => {
                             badge.textContent = '🎯 Fight Back';
                         }, 1000);
