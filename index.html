@@ -383,6 +383,185 @@
             font-size: 0.95rem;
         }
 
+        /* ===== COACH SYSTEM INTEGRATION STYLES ===== */
+        .coach-section {
+            padding: 80px 20px;
+            position: relative;
+            z-index: 1;
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .coach-container {
+            width: 100%;
+            max-width: 720px;
+            background: #121225;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .coach-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .coach-header h2 {
+            margin: 0 0 10px;
+            font-size: 2rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .coach-header p { margin: 0; color: #aaa; font-size: 1rem; }
+
+        .progress-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 32px;
+        }
+
+        .progress-bar .step {
+            flex: 1;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 999px;
+            transition: background .3s ease;
+        }
+
+        .progress-bar .step.active { 
+            background: linear-gradient(90deg, #ff6b35, #ffbe0b); 
+        }
+
+        .step-view { display: none; }
+        .step-view.active { display: block; animation: coachFadeIn .35s ease; }
+        
+        @keyframes coachFadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        .question-title { font-size: 1.3rem; margin: 0 0 20px; font-weight: 700; color: #fff; }
+        .options { display: grid; gap: 14px; }
+        .options.grid-3 { grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); }
+
+        .option-btn {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #e0e0e0;
+            padding: 18px;
+            border-radius: 14px;
+            cursor: pointer;
+            text-align: left;
+            transition: all .2s ease;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .option-btn:hover {
+            border-color: #ffbe0b;
+            background: rgba(255,190,11,0.05);
+            box-shadow: 0 0 15px rgba(255,190,11,0.1);
+        }
+
+        .option-btn.selected {
+            border-color: #ff6b35;
+            background: rgba(255,107,53,0.1);
+            box-shadow: 0 0 15px rgba(255,107,53,0.15);
+            color: #fff;
+        }
+
+        .option-btn .check {
+            width: 22px; height: 22px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 11px; color: transparent;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn.selected .check { 
+            background: #ff6b35; 
+            border-color: #ff6b35; 
+            color: #0a0a0a;
+            font-weight: 900;
+        }
+
+        .nav { display: flex; justify-content: space-between; margin-top: 32px; }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            transition: all .2s ease;
+            font-size: 0.95rem;
+        }
+
+        .btn:hover { border-color: #ffbe0b; color: #ffbe0b; }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b35, #ffbe0b);
+            color: #0a0a0a;
+            border: none;
+            box-shadow: 0 5px 15px rgba(255,107,53,0.2);
+        }
+
+        .btn-primary:hover { filter: brightness(1.1); color: #0a0a0a; box-shadow: 0 8px 20px rgba(255,107,53,0.4); }
+        .btn:disabled { opacity: .3; cursor: not-allowed; filter: grayscale(1); box-shadow: none; }
+
+        /* Results Styles */
+        .plan-meta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+        .tag {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            padding: 8px 16px; border-radius: 999px; font-size: .85rem; color: #ccc; font-weight: 600;
+        }
+        .schedule { display: grid; gap: 20px; }
+        .day-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 24px;
+        }
+        .day-card h3 { margin: 0 0 14px; font-size: 1.15rem; color: #ffbe0b; font-family: 'Montserrat', sans-serif; }
+        .ex-list { list-style: none; padding: 0; margin: 0; }
+        .ex-list li { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+        .ex-list li:last-child { border-bottom: none; }
+        .ex-name { font-weight: 600; color: #fff; }
+        .ex-meta { color: #aaa; font-size: .9rem; }
+        
+        .advice-box {
+            background: rgba(255,107,53,0.05);
+            border-left: 4px solid #ff6b35;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+        .advice-box h4 { margin: 0 0 10px; color: #ff6b35; font-size: 1.1rem; }
+        .advice-box ul { margin: 0; padding-left: 20px; color: #ccc; }
+        .advice-box li { margin-bottom: 8px; }
+        .advice-box li:last-child { margin-bottom: 0; }
+        
+        .tab-bar { display: flex; gap: 10px; margin-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .tab-btn { 
+            background: transparent; border: none; color: #aaa; cursor: pointer; padding: 10px 16px; 
+            border-radius: 8px; font-weight: 700; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; transition: all 0.2s;
+        }
+        .tab-btn.active { color: #0a0a0a; background: #ffbe0b; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; animation: coachFadeIn .35s ease; }
+        .print-btn { float: right; }
+
+        /* ===== PROGRESS & END LAYOUTS ===== */
         .progress-section {
             padding: 80px 20px;
             position: relative;
@@ -592,6 +771,20 @@
             .tshirt-preview-img {
                 width: 90%;
             }
+            .coach-container {
+                padding: 24px 16px;
+            }
+        }
+
+        @media print {
+            body { background: #fff; color: #000; margin: 0; }
+            .coach-container { box-shadow: none; border: 1px solid #ccc; width: 100%; max-width: 100%; background: #fff; color: #000; }
+            .btn, .nav, .tab-bar, .video-panel, .lang-switcher, .music-toggle, .hero, .stats-section, .action-section, .progress-section, .cta-section, footer { display: none !important; }
+            .tab-panel { display: block !important; opacity: 1 !important; color: #000 !important; }
+            .day-card { background: #fff !important; border: 1px solid #000 !important; color: #000 !important; }
+            .ex-name, .day-card h3, .question-title { color: #000 !important; }
+            .ex-meta, .advice-box ul { color: #333 !important; }
+            .advice-box { background: #eee !important; border-left: 4px solid #000 !important; }
         }
     </style>
 </head>
@@ -646,7 +839,7 @@
             Muscle loss is not inevitable. Every rep, every step, every healthy meal is a declaration of war against weakness. 
             <strong>You have the power to rebuild, to strengthen, to thrive.</strong>
         </p>
-        <a href="#action" class="cta-button">Start Your Journey</a>
+        <a href="#coach-generator" class="cta-button">Start Your Journey</a>
     </section>
 
     <section class="stats-section">
@@ -706,6 +899,140 @@
         </div>
     </section>
 
+    <section class="coach-section fade-in" id="coach-generator">
+        <h2 class="section-title">Ainepocras <span>Workout Coach</span></h2>
+        
+        <div id="aine-coach" class="coach-container">
+            <div class="coach-header">
+                <p>Answer 5 brief questions to build your personalized anti-sarcopenia training blueprint.</p>
+            </div>
+
+            <div class="progress-bar" id="progressBar">
+                <div class="step active"></div>
+                <div class="step"></div>
+                <div class="step"></div>
+                <div class="step"></div>
+                <div class="step"></div>
+            </div>
+
+            <div class="step-view active" id="step-0">
+                <div class="question-title">What is your main goal?</div>
+                <div class="options">
+                <button class="option-btn" data-key="goal" data-value="fatloss">
+                    <span>🔥 Fat Loss & Tone</span><span class="check">✓</span>
+                </button>
+                <button class="option-btn" data-key="goal" data-value="muscle">
+                    <span>💪 Build Muscle</span><span class="check">✓</span>
+                </button>
+                <button class="option-btn" data-key="goal" data-value="strength">
+                    <span>🏋️ Strength & Power</span><span class="check">✓</span>
+                </button>
+                <button class="option-btn" data-key="goal" data-value="general">
+                    <span>❤️ General Fitness</span><span class="check">✓</span>
+                </button>
+                </div>
+                <div class="nav"><span></span><button class="btn btn-primary" id="next-0" disabled>Next →</button></div>
+            </div>
+
+            <div class="step-view" id="step-1">
+                <div class="question-title">How long have you been training?</div>
+                <div class="options">
+                <button class="option-btn" data-key="experience" data-value="beginner">
+                    <span>🌱 Beginner (&lt; 6 months)</span><span class="check">✓</span>
+                </button>
+                <button class="option-btn" data-key="experience" data-value="intermediate">
+                    <span>🌿 Intermediate (6–12 months)</span><span class="check">✓</span>
+                </button>
+                <button class="option-btn" data-key="experience" data-value="advanced">
+                    <span>🌳 Advanced (1+ years)</span><span class="check">✓</span>
+                </button>
+                </div>
+                <div class="nav">
+                <button class="btn" id="prev-1">← Back</button>
+                <button class="btn btn-primary" id="next-1" disabled>Next →</button>
+                </div>
+            </div>
+
+            <div class="step-view" id="step-2">
+                <div class="question-title">What equipment do you have?</div>
+                <div class="options">
+                <button class="option-btn" data-key="equipment" data-value="bodyweight">
+                    <span>🧘 Bodyweight Only</span><span class="check">✓</span>
+                </button>
+                <button class="option-btn" data-key="equipment" data-value="dumbbells">
+                    <span>🏋️ Dumbbells + Bench</span><span class="check">✓</span>
+                </button>
+                <button class="option-btn" data-key="equipment" data-value="fullgym">
+                    <span>🤖 Full Gym Access</span><span class="check">✓</span>
+                </button>
+                </div>
+                <div class="nav">
+                <button class="btn" id="prev-2">← Back</button>
+                <button class="btn btn-primary" id="next-2" disabled>Next →</button>
+                </div>
+            </div>
+
+            <div class="step-view" id="step-3">
+                <div class="question-title">How many days per week can you train?</div>
+                <div class="options grid-3">
+                <button class="option-btn" data-key="days" data-value="2"><span>2 Days</span><span class="check">✓</span></button>
+                <button class="option-btn" data-key="days" data-value="3"><span>3 Days</span><span class="check">✓</span></button>
+                <button class="option-btn" data-key="days" data-value="4"><span>4 Days</span><span class="check">✓</span></button>
+                <button class="option-btn" data-key="days" data-value="5"><span>5 Days</span><span class="check">✓</span></button>
+                <button class="option-btn" data-key="days" data-value="6"><span>6 Days</span><span class="check">✓</span></button>
+                </div>
+                <div class="nav">
+                <button class="btn" id="prev-3">← Back</button>
+                <button class="btn btn-primary" id="next-3" disabled>Next →</button>
+                </div>
+            </div>
+
+            <div class="step-view" id="step-4">
+                <div class="question-title">How long per session?</div>
+                <div class="options">
+                <button class="option-btn" data-key="duration" data-value="short">
+                    <span>⏱️ 30 minutes (focused)</span><span class="check">✓</span>
+                </button>
+                <button class="option-btn" data-key="duration" data-value="medium">
+                    <span>⏲️ 45 minutes (standard)</span><span class="check">✓</span>
+                </button>
+                <button class="option-btn" data-key="duration" data-value="long">
+                    <span>🕰️ 60+ minutes (full)</span><span class="check">✓</span>
+                </button>
+                </div>
+                <div class="nav">
+                <button class="btn" id="prev-4">← Back</button>
+                <button class="btn btn-primary" id="next-4" disabled>Create Plan 🚀</button>
+                </div>
+            </div>
+
+            <div class="step-view results" id="step-results">
+                <div class="plan-meta" id="planMeta"></div>
+
+                <div class="tab-bar">
+                <button class="tab-btn active" data-tab="schedule">Schedule</button>
+                <button class="tab-btn" data-tab="details">Exercises</button>
+                <button class="tab-btn" data-tab="tips">Coach Tips</button>
+                </div>
+
+                <div class="tab-panel active" id="tab-schedule">
+                <div class="schedule" id="schedule"></div>
+                </div>
+                <div class="tab-panel" id="tab-details">
+                <div id="details"></div>
+                </div>
+                <div class="tab-panel" id="tab-tips">
+                <div id="tips"></div>
+                </div>
+
+                <div class="nav" style="margin-top:24px">
+                <button class="btn" id="restart">↺ Start Over</button>
+                <button class="btn btn-primary print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="progress-section">
         <h2 class="section-title">The <span>Power of Consistency</span></h2>
         <div class="progress-container">
@@ -754,7 +1081,7 @@
             Sarcopenia wants you to slow down. To give up. To accept weakness as aging. 
             <strong style="color: #ffbe0b;">Refuse.</strong> Every muscle fiber you save is a day of independence you gain.
         </p>
-        <a href="#action" class="cta-button">I Choose Strength 💪</a>
+        <a href="#coach-generator" class="cta-button">I Choose Strength 💪</a>
 
         <div class="image-display-container fade-in">
             <img src="ainepocras.png" alt="Ainepocras T-Shirt Preview" class="tshirt-preview-img">
@@ -777,11 +1104,8 @@
     <script>
         // --- 1. AUTOMATIC LANGUAGE REDIRECTION ROUTER ---
         (function() {
-            // Read user preferred system/browser language settings
             const userLang = navigator.language || navigator.userLanguage;
             const lowerLang = userLang.toLowerCase();
-            
-            // Avoid looping if the user is already explicitly on a sub-language page
             const currentFile = window.location.pathname.split("/").pop();
             
             if (currentFile !== "es.html" && currentFile !== "nl.html") {
@@ -941,26 +1265,17 @@
             const brandTitle = document.getElementById('brand-title');
             const badge = document.getElementById('action-badge');
 
-            // Initial trigger after 3 seconds of load time
             setTimeout(() => {
-                fist.classList.add('strike'); // Fist drops down
-
-                // Triggers exactly when the fist makes physical contact (400ms match)
+                fist.classList.add('strike');
                 setTimeout(() => {
                     document.body.classList.add('screen-quake');
-
-                    // Apply horizontal line cross-over onto Sarcopenia
                     title.classList.add('crossed');
-                    
-                    // Reveal the brand text layer right underneath it
                     brandTitle.classList.add('revealed');
 
-                    // Terminate the heavy screen-quake feedback animation
                     setTimeout(() => {
                         document.body.classList.remove('screen-quake');
                     }, 400);
 
-                    // Retract the fist away safely after resting on scene
                     setTimeout(() => {
                         fist.style.transition = 'top 1s ease, opacity 1s ease, transform 1s ease';
                         fist.style.top = '-150px';
@@ -970,14 +1285,10 @@
                         setTimeout(() => {
                             badge.textContent = '🎯 Fight Back';
                         }, 1000);
-
                     }, 2500);
-
                 }, 400);
-
             }, 3000);
         });
-    </script>
 
         document.addEventListener('DOMContentLoaded', () => {
             const leftVideo = document.getElementById('leftVideo');
@@ -988,5 +1299,235 @@
                 });
             }
         });
+
+        // ===== COACH SYSTEM RULE ENGINE LOGIC =====
+        const EXERCISE_DB = [
+            { id:'bw_squat', name:'Air Squat', equip:'bodyweight', type:'legs', diff:'beginner', desc:'Feet shoulder-width, hips back and down, chest up.' },
+            { id:'bw_lunge', name:'Walking Lunge', equip:'bodyweight', type:'legs', diff:'beginner', desc:'Step forward, drop back knee to floor, drive up.' },
+            { id:'bw_glute', name:'Glute Bridge', equip:'bodyweight', type:'legs', diff:'beginner', desc:'Lie on back, drive hips to ceiling, squeeze glutes.' },
+            { id:'bw_pushup', name:'Push-Up', equip:'bodyweight', type:'push', diff:'beginner', desc:'Body straight, lower chest to floor, press up.' },
+            { id:'bw_dip', name:'Bench Dip', equip:'bodyweight', type:'push', diff:'beginner', desc:'Hands on bench behind you, lower until elbows hit 90°.' },
+            { id:'bw_pullup', name:'Pull-Up / Negative', equip:'bodyweight', type:'pull', diff:'intermediate', desc:'Hang, pull chin over bar; use negatives if needed.' },
+            { id:'bw_inverted', name:'Inverted Row', equip:'bodyweight', type:'pull', diff:'beginner', desc:'Under a table or bar, pull chest to it.' },
+            { id:'bw_plank', name:'Plank', equip:'bodyweight', type:'core', diff:'beginner', desc:'Hold body straight on forearms and toes.' },
+            { id:'bw_legraise', name:'Leg Raise', equip:'bodyweight', type:'core', diff:'beginner', desc:'Lie on back, lift legs to 90°, lower slowly.' },
+            { id:'bw_burpee', name:'Burpee', equip:'bodyweight', type:'full', diff:'intermediate', desc:'Squat, kick back to plank, push-up, jump up.' },
+            { id:'bw_mtn', name:'Mountain Climber', equip:'bodyweight', type:'core', diff:'beginner', desc:'Plank position, alternate driving knees to chest.' },
+            { id:'db_goblet', name:'Goblet Squat', equip:'dumbbells', type:'legs', diff:'beginner', desc:'Hold one dumbbell at chest, squat deep.' },
+            { id:'db_rdl', name:'Dumbbell RDL', equip:'dumbbells', type:'legs', diff:'intermediate', desc:'Slight knee bend, hinge hips back, dumbbells close to shins.' },
+            { id:'db_bulgarian', name:'Bulgarian Split Squat', equip:'dumbbells', type:'legs', diff:'intermediate', desc:'Rear foot on bench, dumbbells at sides, drop back knee.' },
+            { id:'db_press', name:'Dumbbell Bench Press', equip:'dumbbells', type:'push', diff:'beginner', desc:'Press dumbbells from chest to full extension.' },
+            { id:'db_fly', name:'Dumbbell Fly', equip:'dumbbells', type:'push', diff:'intermediate', desc:'Slight bend in elbows, open wide, squeeze chest.' },
+            { id:'db_row', name:'One-Arm Dumbbell Row', equip:'dumbbells', type:'pull', diff:'beginner', desc:'Bench support, pull dumbbell to hip.' },
+            { id:'db_curl', name:'Dumbbell Curl', equip:'dumbbells', type:'pull', diff:'beginner', desc:'Elbows fixed, curl to shoulders, lower slowly.' },
+            { id:'db_ohp', name:'Dumbbell Overhead Press', equip:'dumbbells', type:'push', diff:'beginner', desc:'Press dumbbells from shoulders to overhead.' },
+            { id:'db_shrug', name:'Dumbbell Shrug', equip:'dumbbells', type:'pull', diff:'beginner', desc:'Shrug shoulders toward ears, pause, lower.' },
+            { id:'db_crunch', name:'Weighted Crunch', equip:'dumbbells', type:'core', diff:'beginner', desc:'Hold small dumbbell at chest, crunch up.' },
+            { id:'gym_backsq', name:'Barbell Back Squat', equip:'fullgym', type:'legs', diff:'intermediate', desc:'Bar on traps, squat to depth, drive through whole foot.' },
+            { id:'gym_dead', name:'Barbell Deadlift', equip:'fullgym', type:'legs', diff:'intermediate', desc:'Grip bar at mid-foot, chest up, hinge and stand tall.' },
+            { id:'gym_legp', name:'Leg Press', equip:'fullgym', type:'legs', diff:'beginner', desc:'Feet shoulder-width, lower until knees hit 90°, press.' },
+            { id:'gym_bench', name:'Barbell Bench Press', equip:'fullgym', type:'push', diff:'intermediate', desc:'Pinch shoulder blades, press in a slight arc.' },
+            { id:'gym_incline', name:'Incline Bench Press', equip:'fullgym', type:'push', diff:'intermediate', desc:'30° incline, press focusing on upper chest.' },
+            { id:'gym_lat', name:'Lat Pulldown', equip:'fullgym', type:'pull', diff:'beginner', desc:'Pull bar to upper chest, control on the way up.' },
+            { id:'gym_cabler', name:'Cable Row', equip:'fullgym', type:'pull', diff:'beginner', desc:'Sit upright, pull to lower ribs, squeeze shoulder blades.' },
+            { id:'gym_face', name:'Face Pull', equip:'fullgym', type:'pull', diff:'beginner', desc:'Pull rope to face, external rotation at end.' },
+            { id:'gym_ohp', name:'Overhead Press', equip:'fullgym', type:'push', diff:'intermediate', desc:'Press bar from front delts to lockout overhead.' },
+            { id:'gym_hang', name:'Hanging Leg Raise', equip:'fullgym', type:'core', diff:'intermediate', desc:'Hang from bar, raise legs to 90°, control down.' },
+            { id:'gym_tread', name:'Incline Walk / Treadmill', equip:'fullgym', type:'cardio', diff:'beginner', desc:'12–15% incline, brisk pace 15–20 min.' },
+            { id:'gym_bike', name:'Stationary Bike / Rower', equip:'fullgym', type:'cardio', diff:'beginner', desc:'Steady state 10–20 min or intervals.' },
+        ];
+
+        const Splits = {
+            2: ['Full Body A', 'Full Body B'],
+            3: ['Push', 'Pull', 'Legs'],
+            4: ['Upper A', 'Lower A', 'Upper B', 'Lower B'],
+            5: ['Push', 'Pull', 'Legs', 'Upper', 'Lower'],
+            6: ['Push A', 'Pull A', 'Legs A', 'Push B', 'Pull B', 'Legs B'],
+        };
+
+        const RepSchemes = {
+            fatloss: { reps:'12–15', sets:'3', rest:'45–60 sec', note:'Higher reps, shorter rest to keep heart rate up.' },
+            muscle: { reps:'8–12', sets:'3–4', rest:'60–90 sec', note:'Moderate reps with controlled tempo for hypertrophy.' },
+            strength: { reps:'3–6', sets:'4–5', rest:'2–3 min', note:'Lower reps, heavy loads, longer rest for force production.' },
+            general: { reps:'10–12', sets:'3', rest:'60 sec', note:'Balanced approach for health and endurance.' },
+        };
+
+        let currentStep = 0;
+        const answers = {};
+
+        const steps = document.querySelectorAll('.step-view');
+        const progressDots = document.querySelectorAll('.progress-bar .step');
+
+        function updateUI() {
+            steps.forEach((s,i) => s.classList.toggle('active', i === currentStep));
+            progressDots.forEach((d,i) => d.classList.toggle('active', i <= currentStep));
+        }
+
+        function selectOption(btn) {
+            const key = btn.dataset.key;
+            const value = btn.dataset.value;
+            answers[key] = value;
+
+            const siblings = btn.parentElement.querySelectorAll('.option-btn');
+            siblings.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+
+            const nextBtn = document.getElementById(`next-${currentStep}`);
+            if (nextBtn) nextBtn.disabled = false;
+        }
+
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.addEventListener('click', () => selectOption(btn));
+        });
+
+        function goNext() {
+            if (currentStep < 4) {
+                currentStep++;
+                updateUI();
+            } else {
+                buildPlan();
+                currentStep = 5;
+                updateUI();
+            }
+        }
+        function goPrev() {
+            if (currentStep > 0) { currentStep--; updateUI(); }
+        }
+
+        for (let i=0;i<=4;i++) {
+            const n = document.getElementById(`next-${i}`);
+            const p = document.getElementById(`prev-${i}`);
+            if (n) n.addEventListener('click', goNext);
+            if (p) p.addEventListener('click', goPrev);
+        }
+
+        document.getElementById('restart').addEventListener('click', () => {
+            Object.keys(answers).forEach(k => delete answers[k]);
+            currentStep = 0;
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            for (let i=0;i<=4;i++) {
+                const n = document.getElementById(`next-${i}`);
+                if (n) n.disabled = true;
+            }
+            document.getElementById('schedule').innerHTML = '';
+            document.getElementById('details').innerHTML = '';
+            document.getElementById('tips').innerHTML = '';
+            document.getElementById('planMeta').innerHTML = '';
+            updateUI();
+        });
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+            });
+        });
+
+        function buildPlan() {
+            const g = answers.goal;
+            const e = answers.experience;
+            const q = answers.equipment;
+            const d = parseInt(answers.days);
+            const t = answers.duration;
+
+            const scheme = RepSchemes[g];
+            const splitNames = Splits[d] || ['Full Body'];
+            const exCount = t === 'short' ? 5 : t === 'medium' ? 7 : 9;
+
+            const pick = (type, count, difficultyCap) => {
+                const pool = EXERCISE_DB.filter(x =>
+                    x.type === type &&
+                    (x.equip === q || (q === 'fullgym' && (x.equip === 'dumbbells' || x.equip === 'bodyweight' || x.equip === 'fullgym'))) &&
+                    diffOk(x.diff, e)
+                );
+                return pool.sort((a,b)=> a.id.localeCompare(b.id)).slice(0, count);
+            };
+
+            function diffOk(exDiff, userExp) {
+                if (userExp === 'beginner') return exDiff === 'beginner';
+                if (userExp === 'intermediate') return exDiff === 'beginner' || exDiff === 'intermediate';
+                return true;
+            }
+
+            const schedule = [];
+            splitNames.forEach((dayName, idx) => {
+                const day = { name: dayName, exercises: [] };
+                if (dayName.includes('Push')) day.exercises = [...pick('push', Math.ceil(exCount/2), e), ...pick('core', 1, e)];
+                else if (dayName.includes('Pull')) day.exercises = [...pick('pull', Math.ceil(exCount/2), e), ...pick('core', 1, e)];
+                else if (dayName.includes('Legs')) day.exercises = [...pick('legs', Math.ceil(exCount/2), e), ...pick('core', 1, e)];
+                else if (dayName.includes('Upper')) day.exercises = [...pick('push', Math.ceil(exCount/3), e), ...pick('pull', Math.ceil(exCount/3), e), ...pick('core', 1, e)];
+                else if (dayName.includes('Lower')) day.exercises = [...pick('legs', Math.ceil(exCount/2), e), ...pick('core', 1, e)];
+                else day.exercises = [...pick('full', 2, e), ...pick('push', 2, e), ...pick('pull', 2, e), ...pick('legs', 2, e), ...pick('core', 1, e)];
+
+                day.exercises = day.exercises.slice(0, exCount);
+                if ((g === 'fatloss' || g === 'general') && day.exercises.length < exCount) {
+                    const cardio = EXERCISE_DB.filter(x=>x.type==='cardio' && (x.equip===q || q==='fullgym')).slice(0,1);
+                    day.exercises.push(...cardio);
+                }
+                schedule.push(day);
+            });
+
+            const meta = document.getElementById('planMeta');
+            meta.innerHTML = `
+                <span class="tag">${g === 'fatloss' ? 'Fat Loss' : g === 'muscle' ? 'Muscle Building' : g === 'strength' ? 'Strength' : 'General Fitness'}</span>
+                <span class="tag">${d} days/week</span>
+                <span class="tag">${t === 'short' ? '30 min' : t === 'medium' ? '45 min' : '60+ min'}</span>
+                <span class="tag">${scheme.sets} sets × ${scheme.reps}</span>
+                <span class="tag">${q === 'fullgym' ? 'Full Gym' : q === 'dumbbells' ? 'Dumbbells' : 'Bodyweight'}</span>
+            `;
+
+            const schedEl = document.getElementById('schedule');
+            schedEl.innerHTML = schedule.map((day, i) => `
+                <div class="day-card">
+                <h3>Day ${i+1} — ${day.name}</h3>
+                <ul class="ex-list">
+                    ${day.exercises.map(ex => `
+                    <li>
+                        <span class="ex-name">${ex.name}</span>
+                        <span class="ex-meta">${scheme.sets} × ${scheme.reps} · ${scheme.rest}</span>
+                    </li>
+                    `).join('')}
+                </ul>
+                </div>
+            `).join('');
+
+            const allEx = [...new Map(schedule.flatMap(d => d.exercises).map(x => [x.id, x])).values()];
+            document.getElementById('details').innerHTML = allEx.map(ex => `
+                <div class="day-card" style="margin-bottom:12px">
+                <h3>${ex.name}</h3>
+                <p style="margin:6px 0 0;color:#aaa">${ex.desc}</p>
+                <div class="ex-meta" style="margin-top:8px">Target: ${ex.type.toUpperCase()} · Equipment: ${ex.equip}</div>
+                </div>
+            `).join('');
+
+            const tips = [];
+            if (e === 'beginner') { tips.push('Focus on form over weight. Film yourself or use a mirror.'); tips.push('Rest 48 hours before training the same muscle group again.'); }
+            if (e === 'advanced') { tips.push('Consider periodization: change rep ranges every 4–6 weeks.'); tips.push('Add a deload week after 6–8 weeks of hard training.'); }
+            if (g === 'fatloss') { tips.push('Nutrition matters most: aim for a slight caloric deficit and high protein.'); tips.push('Add 10 min of incline walking after sessions for extra expenditure.'); }
+            if (g === 'muscle') { tips.push('Protein target: roughly 1.6–2.2 g per kg of body weight daily.'); tips.push('Sleep 7–9 hours; most muscle repair happens during deep sleep.'); }
+            if (g === 'strength') { tips.push('Track every lift. Progressive overload is the primary driver.'); tips.push('Brace your core like someone is about to punch you on every heavy set.'); }
+            if (q === 'bodyweight') { tips.push('To progress, slow down the tempo or add more reps before advancing variations.'); }
+            if (d >= 5) { tips.push('With 5–6 days, pay attention to fatigue; swap a hard day for a deload if needed.'); }
+
+            document.getElementById('tips').innerHTML = `
+                <div class="advice-box">
+                <h4>Your Plan Notes</h4>
+                <ul>
+                    <li><strong>Sets/Reps:</strong> ${scheme.sets} sets of ${scheme.reps} reps</li>
+                    <li><strong>Rest:</strong> ${scheme.rest}</li>
+                    <li><strong>Principle:</strong> ${scheme.note}</li>
+                </ul>
+                </div>
+                <div class="advice-box">
+                <h4>Coach Tips</h4>
+                <ul>
+                    ${tips.map(t => `<li>${t}</li>`).join('')}
+                </ul>
+                </div>
+            `;
+        }
+    </script>
 </body>
 </html>
