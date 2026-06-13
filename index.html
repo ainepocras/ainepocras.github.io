@@ -421,6 +421,7 @@
             display: flex;
             gap: 10px;
             margin-bottom: 32px;
+            justify-content: space-between;
         }
 
         .progress-bar .step {
@@ -679,8 +680,11 @@
             background: rgba(0, 0, 0, 0.95);
             box-shadow: 8px 0 40px rgba(0, 0, 0, 0.5);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            gap: 20px;
+            overflow-y: auto;
         }
 
         @media (max-width: 900px) {
@@ -694,7 +698,7 @@
 
         .left-video-player {
             width: 100%;
-            max-height: 100%;
+            max-height: 45vh;
             border-radius: 24px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
             background: #000;
@@ -802,6 +806,10 @@
             <source src="https://raw.githubusercontent.com/ainepocras/ainepocras.github.io/main/Short_Train.mp4" type="video/mp4">
             Your browser does not support MP4 playback.
         </video>
+        <video id="leftVideo2" class="left-video-player" autoplay playsinline loop controls preload="metadata">
+            <source src="https://raw.githubusercontent.com/ainepocras/ainepocras.github.io/main/Short_PushUps.mp4" type="video/mp4">
+            Your browser does not support MP4 playback.
+        </video>
     </div>
     <canvas id="particles-canvas"></canvas>
 
@@ -899,6 +907,7 @@
         </div>
     </section>
 
+    <!-- ===== COACH QUESTIONNAIRE SECTION ===== -->
     <section class="coach-section fade-in" id="coach-generator">
         <h2 class="section-title">Ainepocras <span>Workout Coach</span></h2>
         
@@ -915,6 +924,7 @@
                 <div class="step"></div>
             </div>
 
+            <!-- Step 1: Goal -->
             <div class="step-view active" id="step-0">
                 <div class="question-title">What is your main goal?</div>
                 <div class="options">
@@ -934,6 +944,7 @@
                 <div class="nav"><span></span><button class="btn btn-primary" id="next-0" disabled>Next →</button></div>
             </div>
 
+            <!-- Step 2: Experience -->
             <div class="step-view" id="step-1">
                 <div class="question-title">How long have you been training?</div>
                 <div class="options">
@@ -953,6 +964,7 @@
                 </div>
             </div>
 
+            <!-- Step 3: Equipment -->
             <div class="step-view" id="step-2">
                 <div class="question-title">What equipment do you have?</div>
                 <div class="options">
@@ -972,6 +984,7 @@
                 </div>
             </div>
 
+            <!-- Step 4: Days -->
             <div class="step-view" id="step-3">
                 <div class="question-title">How many days per week can you train?</div>
                 <div class="options grid-3">
@@ -987,6 +1000,7 @@
                 </div>
             </div>
 
+            <!-- Step 5: Duration -->
             <div class="step-view" id="step-4">
                 <div class="question-title">How long per session?</div>
                 <div class="options">
@@ -1006,6 +1020,7 @@
                 </div>
             </div>
 
+            <!-- Results Panel -->
             <div class="step-view results" id="step-results">
                 <div class="plan-meta" id="planMeta"></div>
 
@@ -1298,6 +1313,13 @@
                     console.log('Autoplay with audio blocked by browser.');
                 });
             }
+            const leftVideo2 = document.getElementById('leftVideo2');
+            if (leftVideo2) {
+                leftVideo2.volume = 0.65;
+                leftVideo2.play().catch(() => {
+                    console.log('Autoplay with audio blocked by browser.');
+                });
+            }
         });
 
         // ===== COACH SYSTEM RULE ENGINE LOGIC =====
@@ -1327,7 +1349,7 @@
             { id:'gym_dead', name:'Barbell Deadlift', equip:'fullgym', type:'legs', diff:'intermediate', desc:'Grip bar at mid-foot, chest up, hinge and stand tall.' },
             { id:'gym_legp', name:'Leg Press', equip:'fullgym', type:'legs', diff:'beginner', desc:'Feet shoulder-width, lower until knees hit 90°, press.' },
             { id:'gym_bench', name:'Barbell Bench Press', equip:'fullgym', type:'push', diff:'intermediate', desc:'Pinch shoulder blades, press in a slight arc.' },
-            { id:'gym_incline', name:'Incline Bench Press', equip:'fullgym', type:'push', diff:'intermediate', desc:'30° incline, press focusing on upper chest.' },
+            { id:'gym_incline', name:'Incline Bench Press', equip:'fullgym', type:'push', visible: true, diff:'intermediate', desc:'30° incline, press focusing on upper chest.' },
             { id:'gym_lat', name:'Lat Pulldown', equip:'fullgym', type:'pull', diff:'beginner', desc:'Pull bar to upper chest, control on the way up.' },
             { id:'gym_cabler', name:'Cable Row', equip:'fullgym', type:'pull', diff:'beginner', desc:'Sit upright, pull to lower ribs, squeeze shoulder blades.' },
             { id:'gym_face', name:'Face Pull', equip:'fullgym', type:'pull', diff:'beginner', desc:'Pull rope to face, external rotation at end.' },
