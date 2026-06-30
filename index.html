@@ -78,7 +78,7 @@
             perspective: 1000px;
         }
 
-        .interactive-word {
+        .word-line {
             font-family: 'Playfair Display', serif;
             font-size: clamp(2.5rem, 6vw, 5rem);
             font-weight: 700;
@@ -86,57 +86,61 @@
             justify-content: center;
             gap: 2px;
             position: relative;
-            transition: all 0.5s ease;
         }
 
-        /* Letter-slot morph animation: each slot overlays the old (Sarcopenia)
-           letter and the new (Ainepocras) letter in the same grid cell, so the
-           word transforms in place rather than stacking two separate words. */
-        .letter-slot {
-            display: inline-grid;
-            place-items: center;
-            position: relative;
-            min-width: 0.55em;
+        .word-line + .word-line {
+            margin-top: 10px;
         }
 
-        .letter-slot .letter-old,
-        .letter-slot .letter-new {
-            grid-row: 1;
-            grid-column: 1;
+        .word-line .letter-slot {
             display: inline-block;
             position: relative;
+        }
+
+        .word-line .letter-slot span {
+            display: inline-block;
             background: linear-gradient(90deg, #ff6b35, #00a896, #ffbe0b, #ff6b35);
             background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: gradientShift 4s ease infinite;
-            transition: transform 0.6s cubic-bezier(0.65, -0.3, 0.35, 1.3), opacity 0.5s ease;
-            will-change: transform, opacity;
+            transition: opacity 0.25s ease;
         }
 
-        /* Old letter (Sarcopenia) starts fully visible, then travels away
-           and fades as it is removed, right to left. */
-        .letter-slot .letter-old {
-            opacity: 1;
-            transform: translateY(0) rotate(0deg) scale(1);
-        }
-
-        .letter-slot .letter-old.hide {
+        /* Line 1 (Sarcopenia) letters vanish once they take flight */
+        #line-old .letter-slot span.flown {
             opacity: 0;
-            transform: translateY(40px) rotate(25deg) scale(0.6);
         }
 
-        /* New letter (Ainepocras) starts hidden above its slot, then travels
-           down into place and fades in, left to right. */
-        .letter-slot .letter-new {
+        /* Line 2 (Ainepocras) letters are reserved/invisible until their
+           flying counterpart lands */
+        #line-new .letter-slot span {
             opacity: 0;
-            transform: translateY(-40px) rotate(-25deg) scale(0.6);
         }
 
-        .letter-slot .letter-new.show {
+        #line-new .letter-slot span.landed {
             opacity: 1;
-            transform: translateY(0) rotate(0deg) scale(1);
+        }
+
+        /* The letter actively travelling between the two lines */
+        .flying-letter {
+            position: fixed;
+            top: 0;
+            left: 0;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            background: linear-gradient(90deg, #ff6b35, #00a896, #ffbe0b, #ff6b35);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease infinite;
+            pointer-events: none;
+            z-index: 20;
+            transition: transform 2.2s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.4s ease 1.8s;
+            will-change: transform;
         }
 
         @keyframes gradientShift {
@@ -836,9 +840,12 @@
     <section class="hero">
         <div id="action-badge" class="pulse-badge">🎯 FIGHT BACK AND REVERSE...</div>
         <div class="animation-wrapper">
-            <h1 id="dynamic-title" class="interactive-word">
-                <span class="letter-slot"><span class="letter-old">S</span><span class="letter-new">A</span></span><span class="letter-slot"><span class="letter-old">a</span><span class="letter-new">i</span></span><span class="letter-slot"><span class="letter-old">r</span><span class="letter-new">n</span></span><span class="letter-slot"><span class="letter-old">c</span><span class="letter-new">e</span></span><span class="letter-slot"><span class="letter-old">o</span><span class="letter-new">p</span></span><span class="letter-slot"><span class="letter-old">p</span><span class="letter-new">o</span></span><span class="letter-slot"><span class="letter-old">e</span><span class="letter-new">c</span></span><span class="letter-slot"><span class="letter-old">n</span><span class="letter-new">r</span></span><span class="letter-slot"><span class="letter-old">i</span><span class="letter-new">a</span></span><span class="letter-slot"><span class="letter-old">a</span><span class="letter-new">s</span></span>
+            <h1 id="line-old" class="word-line">
+                <span class="letter-slot"><span>S</span></span><span class="letter-slot"><span>a</span></span><span class="letter-slot"><span>r</span></span><span class="letter-slot"><span>c</span></span><span class="letter-slot"><span>o</span></span><span class="letter-slot"><span>p</span></span><span class="letter-slot"><span>e</span></span><span class="letter-slot"><span>n</span></span><span class="letter-slot"><span>i</span></span><span class="letter-slot"><span>a</span></span>
             </h1>
+            <h2 id="line-new" class="word-line">
+                <span class="letter-slot"><span>A</span></span><span class="letter-slot"><span>i</span></span><span class="letter-slot"><span>n</span></span><span class="letter-slot"><span>e</span></span><span class="letter-slot"><span>p</span></span><span class="letter-slot"><span>o</span></span><span class="letter-slot"><span>c</span></span><span class="letter-slot"><span>r</span></span><span class="letter-slot"><span>a</span></span><span class="letter-slot"><span>s</span></span>
+            </h2>
             <div id="fist-striker" class="fist-emoji">👊</div>
         </div>
         <p class="hero-subtitle">
@@ -1271,48 +1278,89 @@
             });
         });
 
-        // --- 2. FIST IMPACT & LETTER-BY-LETTER WORD MORPH LOGIC ---
+        // --- 2. FIST IMPACT & LETTER-FLIGHT WORD TRANSITION LOGIC ---
         window.addEventListener('DOMContentLoaded', () => {
             const fist = document.getElementById('fist-striker');
-            const title = document.getElementById('dynamic-title');
+            const lineOld = document.getElementById('line-old');
+            const lineNew = document.getElementById('line-new');
             const badge = document.getElementById('action-badge');
-            const slots = title.querySelectorAll('.letter-slot');
+            const oldLetters = [...lineOld.querySelectorAll('.letter-slot span')];
+            const newLetters = [...lineNew.querySelectorAll('.letter-slot span')];
 
-            // Ainepocras appears left-to-right while Sarcopenia disappears
-            // right-to-left, letter by letter, each letter traveling into/out
-            // of its slot.
+            // Sarcopenia loses letters right-to-left while Ainepocras gains
+            // letters left-to-right: the last letter of Sarcopenia flies to
+            // become the first letter of Ainepocras, the next-to-last flies
+            // to become the second letter, and so on.
+            function flyLetter(sourceEl, destEl) {
+                const sourceRect = sourceEl.getBoundingClientRect();
+                const destRect = destEl.getBoundingClientRect();
+
+                const flyer = document.createElement('span');
+                flyer.className = 'flying-letter';
+                flyer.textContent = destEl.textContent;
+                flyer.style.left = sourceRect.left + 'px';
+                flyer.style.top = sourceRect.top + 'px';
+                document.body.appendChild(flyer);
+
+                // Source letter disappears as its flyer takes off
+                sourceEl.classList.add('flown');
+
+                // Force layout so the initial position is committed before we
+                // animate the transform (otherwise the browser may skip the
+                // transition straight to the end state).
+                // eslint-disable-next-line no-unused-expressions
+                flyer.getBoundingClientRect();
+
+                requestAnimationFrame(() => {
+                    const dx = destRect.left - sourceRect.left;
+                    const dy = destRect.top - sourceRect.top;
+                    flyer.style.transform = `translate(${dx}px, ${dy}px) rotate(360deg)`;
+                });
+
+                setTimeout(() => {
+                    destEl.classList.add('landed');
+                    flyer.remove();
+                }, 2200);
+            }
+
             function runWordTransition() {
-                const total = slots.length;
-                const stepDelay = 130;
+                const total = oldLetters.length;
+                const stepDelay = 1100;
                 for (let t = 0; t < total; t++) {
                     setTimeout(() => {
-                        slots[t].querySelector('.letter-new').classList.add('show');
-                        slots[total - 1 - t].querySelector('.letter-old').classList.add('hide');
+                        const sourceEl = oldLetters[total - 1 - t];
+                        const destEl = newLetters[t];
+                        flyLetter(sourceEl, destEl);
                     }, t * stepDelay);
                 }
-                return (total - 1) * stepDelay + 600; // approx ms until fully settled
+                return (total - 1) * stepDelay + 2200; // approx ms until fully settled
             }
 
             setTimeout(() => {
                 fist.classList.add('strike');
                 setTimeout(() => {
                     document.body.classList.add('screen-quake');
-                    const transitionDuration = runWordTransition();
 
                     setTimeout(() => {
                         document.body.classList.remove('screen-quake');
                     }, 400);
 
+                    // Give a beat so the viewer fully registers "Sarcopenia"
+                    // intact before the letters start breaking off.
                     setTimeout(() => {
-                        fist.style.transition = 'top 1s ease, opacity 1s ease, transform 1s ease';
-                        fist.style.top = '-150px';
-                        fist.style.opacity = '0';
-                        fist.style.transform = 'translateX(-50%) scale(0)';
+                        const transitionDuration = runWordTransition();
 
                         setTimeout(() => {
-                            badge.textContent = '🎯 Fight Back';
-                        }, 1000);
-                    }, Math.max(transitionDuration, 2500));
+                            fist.style.transition = 'top 1s ease, opacity 1s ease, transform 1s ease';
+                            fist.style.top = '-150px';
+                            fist.style.opacity = '0';
+                            fist.style.transform = 'translateX(-50%) scale(0)';
+
+                            setTimeout(() => {
+                                badge.textContent = '🎯 Fight Back';
+                            }, 1000);
+                        }, transitionDuration + 600);
+                    }, 1200);
                 }, 400);
             }, 3000);
         });
