@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ainepocras - Combate la Sarcopenia</title>
+    <title>ainepocras - Lucha contra la Sarcopenia</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght=300;400;600;700;900&family=Playfair+Display:wght=700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -14,6 +14,7 @@
             overflow-x: hidden;
             background: #0a0a0a;
             color: #fff;
+            margin-left: 16.666%;
         }
 
         /* Language Switcher Styling */
@@ -66,24 +67,170 @@
             background: linear-gradient(135deg, rgba(255,107,53,0.15) 0%, rgba(0,168,150,0.15) 50%, rgba(255,190,11,0.15) 100%);
         }
 
-        .hero h1 {
+        /* Custom Word Layout stacked vertically */
+        .animation-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            perspective: 1000px;
+        }
+
+        .word-line {
             font-family: 'Playfair Display', serif;
             font-size: clamp(2.5rem, 6vw, 5rem);
             font-weight: 700;
-            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 2px;
+            position: relative;
+        }
+
+        .word-line + .word-line {
+            margin-top: 10px;
+        }
+
+        /* Line 1 now carries "Derrota la Sarcopenia" before settling on just
+           "Sarcopenia", so give it a slightly smaller ceiling than line 2. */
+        #line-old {
+            font-size: clamp(1.4rem, 5.2vw, 4rem);
+        }
+
+        .word-line .letter-slot {
+            display: inline-block;
+            position: relative;
+        }
+
+        .word-line .letter-slot span {
+            display: inline-block;
             background: linear-gradient(90deg, #ff6b35, #00a896, #ffbe0b, #ff6b35);
             background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: gradientShift 4s ease infinite;
-            text-shadow: 0 0 60px rgba(255,107,53,0.3);
+            transition: opacity 0.25s ease;
+        }
+
+        /* "Derrota la " prefix + strike-through that runs before the
+           letter-flight animation begins */
+        .strike-wrap {
+            position: relative;
+            display: inline-flex;
+            align-items: baseline;
+            gap: 2px;
+        }
+
+        .prefix-text {
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            max-width: 700px;
+            opacity: 1;
+            background: linear-gradient(90deg, #ff6b35, #00a896, #ffbe0b, #ff6b35);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease infinite;
+            transition: opacity 0.6s ease, max-width 0.7s ease 0.2s, margin 0.7s ease 0.2s;
+        }
+
+        .prefix-text.removed {
+            opacity: 0;
+            max-width: 0;
+            margin-right: -2px;
+        }
+
+        .strike-line {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 0;
+            height: 6px;
+            background: #ff6b35;
+            transform: translateY(-50%);
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(255,107,53,0.8);
+            transition: width 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease 0.6s;
+        }
+
+        .strike-line.struck {
+            width: 100%;
+        }
+
+        .strike-line.gone {
+            opacity: 0;
+        }
+
+        /* Line 1 (Sarcopenia) letters vanish once they take flight */
+        #line-old .letter-slot span.flown {
+            opacity: 0;
+        }
+
+        /* Line 2 (Ainepocras) letters are reserved/invisible until their
+           flying counterpart lands */
+        #line-new .letter-slot span {
+            opacity: 0;
+        }
+
+        #line-new .letter-slot span.landed {
+            opacity: 1;
+        }
+
+        /* The letter actively travelling between the two lines */
+        .flying-letter {
+            position: fixed;
+            top: 0;
+            left: 0;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            background: linear-gradient(90deg, #ff6b35, #00a896, #ffbe0b, #ff6b35);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease infinite;
+            pointer-events: none;
+            z-index: 20;
+            transition: transform 2.2s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.4s ease 1.8s;
+            will-change: transform;
         }
 
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
+        }
+
+        .fist-emoji {
+            position: absolute;
+            top: -150px;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            font-size: clamp(3rem, 8vw, 6rem);
+            z-index: 10;
+            pointer-events: none;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), top 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+        }
+
+        /* Impact State for Fist Drop */
+        .fist-emoji.strike {
+            top: 0px;
+            transform: translateX(-50%) scale(1.3);
+        }
+
+        /* Screen shake effect on impact */
+        .screen-quake {
+            animation: quake 0.15s ease-in-out infinite alternate;
+        }
+
+        @keyframes quake {
+            0% { transform: translate(2px, 1px) rotate(0deg); }
+            100% { transform: translate(-1px, -2px) rotate(0.5deg); }
         }
 
         .hero-subtitle {
@@ -109,6 +256,7 @@
             margin-bottom: 30px;
             animation: pulse 2s ease infinite;
             box-shadow: 0 0 30px rgba(255,107,53,0.4);
+            transition: all 0.3s ease;
         }
 
         @keyframes pulse {
@@ -131,12 +279,31 @@
             animation: float 8s ease-in-out infinite;
         }
 
-        .float-icon:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
-        .float-icon:nth-child(2) { top: 20%; right: 15%; animation-delay: 1s; }
-        .float-icon:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 2s; }
-        .float-icon:nth-child(4) { bottom: 20%; right: 10%; animation-delay: 3s; }
-        .float-icon:nth-child(5) { top: 50%; left: 5%; animation-delay: 4s; }
-        .float-icon:nth-child(6) { top: 60%; right: 20%; animation-delay: 5s; }
+        /* Subtle floating word style */
+        .float-text {
+            position: absolute;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #fff;
+            opacity: 0.08;
+            white-space: nowrap;
+            pointer-events: none;
+            animation: float 10s ease-in-out infinite;
+        }
+
+        .float-icon:nth-child(1), .float-text:nth-child(7) { top: 10%; left: 10%; animation-delay: 0s; }
+        .float-icon:nth-child(2), .float-text:nth-child(8) { top: 20%; right: 15%; animation-delay: 1s; }
+        .float-icon:nth-child(3), .float-text:nth-child(9) { bottom: 30%; left: 20%; animation-delay: 2s; }
+        .float-icon:nth-child(4), .float-text:nth-child(10) { bottom: 20%; right: 10%; animation-delay: 3s; }
+        .float-icon:nth-child(5), .float-text:nth-child(11) { top: 50%; left: 5%; animation-delay: 4s; }
+        .float-icon:nth-child(6), .float-text:nth-child(12) { top: 60%; right: 20%; animation-delay: 5s; }
+        
+        .float-text:nth-child(13) { top: 35%; left: 40%; animation-delay: 1.5s; }
+        .float-text:nth-child(14) { bottom: 45%; right: 45%; animation-delay: 3.5s; }
+        .float-text:nth-child(15) { top: 75%; left: 15%; animation-delay: 2.5s; }
 
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -238,11 +405,21 @@
             overflow: hidden;
             transition: all 0.4s ease;
             border: 1px solid rgba(255,255,255,0.05);
+            height: 100%;
         }
 
         .action-card:hover {
             transform: scale(1.03);
             border-color: rgba(255,107,53,0.3);
+        }
+
+        .action-card.clickable-card {
+            text-decoration: none;
+            display: block;
+        }
+
+        .action-card.clickable-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 168, 150, 0.2);
         }
 
         .action-icon {
@@ -255,6 +432,11 @@
             font-size: 1.3rem;
             margin-bottom: 15px;
             color: #fff;
+            transition: color 0.3s ease;
+        }
+
+        .action-card.clickable-card:hover h3 {
+            color: #ffbe0b;
         }
 
         .action-card p {
@@ -263,6 +445,186 @@
             font-size: 0.95rem;
         }
 
+        /* ===== COACH SYSTEM INTEGRATION STYLES ===== */
+        .coach-section {
+            padding: 80px 20px;
+            position: relative;
+            z-index: 1;
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .coach-container {
+            width: 100%;
+            max-width: 720px;
+            background: #121225;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .coach-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .coach-header h2 {
+            margin: 0 0 10px;
+            font-size: 2rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .coach-header p { margin: 0; color: #aaa; font-size: 1rem; }
+
+        .progress-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 32px;
+            justify-content: space-between;
+        }
+
+        .progress-bar .step {
+            flex: 1;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 999px;
+            transition: background .3s ease;
+        }
+
+        .progress-bar .step.active { 
+            background: linear-gradient(90deg, #ff6b35, #ffbe0b); 
+        }
+
+        .step-view { display: none; }
+        .step-view.active { display: block; animation: coachFadeIn .35s ease; }
+        
+        @keyframes coachFadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        .question-title { font-size: 1.3rem; margin: 0 0 20px; font-weight: 700; color: #fff; }
+        .options { display: grid; gap: 14px; }
+        .options.grid-3 { grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); }
+
+        .option-btn {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #e0e0e0;
+            padding: 18px;
+            border-radius: 14px;
+            cursor: pointer;
+            text-align: left;
+            transition: all .2s ease;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .option-btn:hover {
+            border-color: #ffbe0b;
+            background: rgba(255,190,11,0.05);
+            box-shadow: 0 0 15px rgba(255,190,11,0.1);
+        }
+
+        .option-btn.selected {
+            border-color: #ff6b35;
+            background: rgba(255,107,53,0.1);
+            box-shadow: 0 0 15px rgba(255,107,53,0.15);
+            color: #fff;
+        }
+
+        .option-btn .check {
+            width: 22px; height: 22px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 11px; color: transparent;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn.selected .check { 
+            background: #ff6b35; 
+            border-color: #ff6b35; 
+            color: #0a0a0a;
+            font-weight: 900;
+        }
+
+        .nav { display: flex; justify-content: space-between; margin-top: 32px; }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            transition: all .2s ease;
+            font-size: 0.95rem;
+        }
+
+        .btn:hover { border-color: #ffbe0b; color: #ffbe0b; }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b35, #ffbe0b);
+            color: #0a0a0a;
+            border: none;
+            box-shadow: 0 5px 15px rgba(255,107,53,0.2);
+        }
+
+        .btn-primary:hover { filter: brightness(1.1); color: #0a0a0a; box-shadow: 0 8px 20px rgba(255,107,53,0.4); }
+        .btn:disabled { opacity: .3; cursor: not-allowed; filter: grayscale(1); box-shadow: none; }
+
+        /* Results Styles */
+        .plan-meta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+        .tag {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            padding: 8px 16px; border-radius: 999px; font-size: .85rem; color: #ccc; font-weight: 600;
+        }
+        .schedule { display: grid; gap: 20px; }
+        .day-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 24px;
+        }
+        .day-card h3 { margin: 0 0 14px; font-size: 1.15rem; color: #ffbe0b; font-family: 'Montserrat', sans-serif; }
+        .ex-list { list-style: none; padding: 0; margin: 0; }
+        .ex-list li { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+        .ex-list li:last-child { border-bottom: none; }
+        .ex-name { font-weight: 600; color: #fff; }
+        .ex-meta { color: #aaa; font-size: .9rem; }
+        
+        .advice-box {
+            background: rgba(255,107,53,0.05);
+            border-left: 4px solid #ff6b35;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+        .advice-box h4 { margin: 0 0 10px; color: #ff6b35; font-size: 1.1rem; }
+        .advice-box ul { margin: 0; padding-left: 20px; color: #ccc; }
+        .advice-box li { margin-bottom: 8px; }
+        .advice-box li:last-child { margin-bottom: 0; }
+        
+        .tab-bar { display: flex; gap: 10px; margin-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .tab-btn { 
+            background: transparent; border: none; color: #aaa; cursor: pointer; padding: 10px 16px; 
+            border-radius: 8px; font-weight: 700; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; transition: all 0.2s;
+        }
+        .tab-btn.active { color: #0a0a0a; background: #ffbe0b; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; animation: coachFadeIn .35s ease; }
+        .print-btn { float: right; }
+
+        /* ===== PROGRESS & END LAYOUTS ===== */
         .progress-section {
             padding: 80px 20px;
             position: relative;
@@ -347,6 +709,63 @@
             box-shadow: 0 20px 40px rgba(255,107,53,0.5);
         }
 
+        .image-display-container {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .tshirt-preview-img {
+            max-width: 100%;
+            width: 400px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.4s ease;
+        }
+
+        .tshirt-preview-img:hover {
+            transform: scale(1.02);
+        }
+
+        .video-panel {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 16.666%;
+            height: 100vh;
+            z-index: 1002;
+            padding: 18px;
+            background: rgba(0, 0, 0, 0.95);
+            box-shadow: 8px 0 40px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                margin-left: 0;
+            }
+            .video-panel {
+                display: none;
+            }
+        }
+
+        .left-video-player {
+            width: 100%;
+            max-height: 45vh;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            background: #000;
+        }
+
         .music-toggle {
             position: fixed;
             bottom: 30px;
@@ -415,6 +834,23 @@
             .stats-grid, .action-grid {
                 grid-template-columns: 1fr;
             }
+            .tshirt-preview-img {
+                width: 90%;
+            }
+            .coach-container {
+                padding: 24px 16px;
+            }
+        }
+
+        @media print {
+            body { background: #fff; color: #000; margin: 0; }
+            .coach-container { box-shadow: none; border: 1px solid #ccc; width: 100%; max-width: 100%; background: #fff; color: #000; }
+            .btn, .nav, .tab-bar, .video-panel, .lang-switcher, .music-toggle, .hero, .stats-section, .action-section, .progress-section, .cta-section, footer { display: none !important; }
+            .tab-panel { display: block !important; opacity: 1 !important; color: #000 !important; }
+            .day-card { background: #fff !important; border: 1px solid #000 !important; color: #000 !important; }
+            .ex-name, .day-card h3, .question-title { color: #000 !important; }
+            .ex-meta, .advice-box ul { color: #333 !important; }
+            .advice-box { background: #eee !important; border-left: 4px solid #000 !important; }
         }
     </style>
 </head>
@@ -427,6 +863,16 @@
         </select>
     </div>
 
+    <div class="video-panel">
+        <video id="leftVideo" class="left-video-player" autoplay playsinline loop controls preload="metadata">
+            <source src="https://raw.githubusercontent.com/ainepocras/ainepocras.github.io/main/Short_Train.mp4" type="video/mp4">
+            Tu navegador no admite la reproducción de MP4.
+        </video>
+        <video id="leftVideo2" class="left-video-player" autoplay playsinline loop controls preload="metadata">
+            <source src="https://raw.githubusercontent.com/ainepocras/ainepocras.github.io/main/Short_PushUps.mp4" type="video/mp4">
+            Your browser does not support MP4 playback.
+        </video>
+    </div>
     <canvas id="particles-canvas"></canvas>
 
     <div class="floating-icons">
@@ -436,35 +882,56 @@
         <span class="float-icon">🏃</span>
         <span class="float-icon">🥗</span>
         <span class="float-icon">🧘</span>
+        
+        <span class="float-text">Ainepocras</span>
+        <span class="float-text">Ainepocras</span>
+        <span class="float-text">Ainepocras</span>
+        <span class="float-text">Ainepocras</span>
+        <span class="float-text">Ainepocras</span>
+        <span class="float-text">Ainepocras</span>
+        <span class="float-text">Ainepocras</span>
+        <span class="float-text">Ainepocras</span>
+        <span class="float-text">Ainepocras</span>
     </div>
 
     <section class="hero">
-        <div class="pulse-badge">🎯 Contraataca</div>
-        <h1>Derrota la Sarcopenia</h1>
+        <div id="action-badge" class="pulse-badge">🎯 LUCHA Y REVIERTE...</div>
+        <div class="animation-wrapper">
+            <h1 id="line-old" class="word-line">
+                <span id="strike-wrap" class="strike-wrap">
+                <span id="prefix-text" class="prefix-text">Derrota la&nbsp;</span><span class="letter-slot"><span>S</span></span><span class="letter-slot"><span>a</span></span><span class="letter-slot"><span>r</span></span><span class="letter-slot"><span>c</span></span><span class="letter-slot"><span>o</span></span><span class="letter-slot"><span>p</span></span><span class="letter-slot"><span>e</span></span><span class="letter-slot"><span>n</span></span><span class="letter-slot"><span>i</span></span><span class="letter-slot"><span>a</span></span>
+                <span id="strike-line" class="strike-line"></span>
+                </span>
+            </h1>
+            <h2 id="line-new" class="word-line">
+                <span class="letter-slot"><span>A</span></span><span class="letter-slot"><span>i</span></span><span class="letter-slot"><span>n</span></span><span class="letter-slot"><span>e</span></span><span class="letter-slot"><span>p</span></span><span class="letter-slot"><span>o</span></span><span class="letter-slot"><span>c</span></span><span class="letter-slot"><span>r</span></span><span class="letter-slot"><span>a</span></span><span class="letter-slot"><span>s</span></span>
+            </h2>
+            <div id="fist-striker" class="fist-emoji">👊</div>
+        </div>
         <p class="hero-subtitle">
-            La pérdida de masa muscular no es inevitable. Cada repetición, cada paso y cada comida saludable es una declaración de guerra contra la debilidad. 
+            La pérdida muscular no es inevitable. Cada repetición, cada paso, cada comida saludable es una declaración de guerra contra la debilidad. 
             <strong>Tienes el poder de reconstruir, fortalecer y prosperar.</strong>
         </p>
-        <a href="#action" class="cta-button">Comienza Tu Viaje</a>
+        <a href="#coach-generator" class="cta-button">Comienza Tu Viaje</a>
     </section>
 
     <section class="stats-section">
         <div class="stats-grid">
             <div class="stat-card fade-in">
                 <div class="stat-number" data-target="10">0</div>
-                <div class="stat-label">% Pérdida Muscular por Década después de los 50</div>
+                <div class="stat-label">% de Pérdida Muscular por Década Después de los 50</div>
             </div>
             <div class="stat-card fade-in">
                 <div class="stat-number" data-target="30">0</div>
-                <div class="stat-label">% Reducción del Riesgo con Ejercicio Regular</div>
+                <div class="stat-label">% de Reducción del Riesgo con Ejercicio Regular</div>
             </div>
             <div class="stat-card fade-in">
                 <div class="stat-number" data-target="100">0</div>
-                <div class="stat-label">% Reversible con el Entrenamiento Adecuado</div>
+                <div class="stat-label">% Reversible con un Entrenamiento Adecuado</div>
             </div>
             <div class="stat-card fade-in">
                 <div class="stat-number" data-target="1">0</div>
-                <div class="stat-label">Día a la Vez para Desarrollar Fuerza</div>
+                <div class="stat-label">Día a la Vez para Ganar Fuerza</div>
             </div>
         </div>
     </section>
@@ -472,35 +939,176 @@
     <section class="action-section" id="action">
         <h2 class="section-title">Tu <span>Plan de Batalla</span></h2>
         <div class="action-grid">
-            <div class="action-card fade-in">
+            <a href="https://musclewiki.com/" target="_blank" rel="noopener noreferrer" class="action-card clickable-card fade-in">
                 <span class="action-icon">🏋️</span>
                 <h3>Entrenamiento de Resistencia</h3>
-                <p>Levanta pesas, usa bandas elásticas o haz ejercicios con tu peso corporal de 2 a 3 veces por semana. La sobrecarga progresiva es la clave.</p>
-            </div>
-            <div class="action-card fade-in">
+                <p>Levanta pesas, usa bandas de resistencia o haz ejercicios con el peso corporal 2-3 veces por semana. La sobrecarga progresiva es clave.</p>
+            </a>
+            <a href="https://www.calculator.net/protein-calculator.html" target="_blank" rel="noopener noreferrer" class="action-card clickable-card fade-in">
                 <span class="action-icon">🥗</span>
-                <h3>Poder de las Proteínas</h3>
-                <p>Apunta a consumir entre 1.0 y 1.2 g de proteína por kg de peso corporal al día. Distribuye el consumo a lo largo de las comidas.</p>
-            </div>
-            <div class="action-card fade-in">
+                <h3>Poder de la Proteína</h3>
+                <p>Apunta a 1.0-1.2g de proteína por kg de peso corporal al día. Reparte la ingesta entre las comidas.</p>
+            </a>
+            <a href="https://www.youtube.com/shorts/tZUC-uAGLEA" target="_blank" rel="noopener noreferrer" class="action-card clickable-card fade-in">
                 <span class="action-icon">🏃</span>
-                <h3>Muévete Todos los Días</h3>
-                <p>Camina, nada, anda en bicicleta... mantente en movimiento. La constancia supera a la intensidad.</p>
-            </div>
-            <div class="action-card fade-in">
+                <h3>Muévete Cada Día</h3>
+                <p>Caminar, nadar, andar en bicicleta — sigue en movimiento. La constancia vence a la intensidad.</p>
+            </a>
+            <a href="https://www.youtube.com/results?search_query=Rest+%26+Recover+Muscles+grow+during+rest.+Prioritize+7-9+hours+of+quality+sleep." target="_blank" rel="noopener noreferrer" class="action-card clickable-card fade-in">
                 <span class="action-icon">😴</span>
-                <h3>Descanso y Recuperación</h3>
-                <p>Los músculos crecen durante el descanso. Prioriza entre 7 y 9 horas de sueño de calidad.</p>
-            </div>
-            <div class="action-card fade-in">
+                <h3>Descansa y Recupérate</h3>
+                <p>Los músculos crecen durante el descanso. Prioriza 7-9 horas de sueño de calidad.</p>
+            </a>
+            <a href="https://www.youtube.com/results?search_query=Balance+%26+Flexibility+Yoga%2C+tai+chi%2C+and+stretching+improve+stability+and+prevent+falls." target="_blank" rel="noopener noreferrer" class="action-card clickable-card fade-in">
                 <span class="action-icon">🧘</span>
                 <h3>Equilibrio y Flexibilidad</h3>
-                <p>El yoga, el tai chi y los estiramientos mejoran la estabilidad y ayudan a prevenir caídas.</p>
-            </div>
-            <div class="action-card fade-in">
+                <p>El yoga, el tai chi y los estiramientos mejoran la estabilidad y previenen caídas.</p>
+            </a>
+            <a href="https://www.youtube.com/results?search_query=Track+Progress+Measure+strength+gains%2C+not+just+weight.+Celebrate+small+wins." target="_blank" rel="noopener noreferrer" class="action-card clickable-card fade-in">
                 <span class="action-icon">📊</span>
-                <h3>Registra tu Progreso</h3>
-                <p>Mide tus ganancias de fuerza, no solo el peso. Celebra cada pequeña victoria.</p>
+                <h3>Sigue tu Progreso</h3>
+                <p>Mide las ganancias de fuerza, no solo el peso. Celebra las pequeñas victorias.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- ===== COACH QUESTIONNAIRE SECTION ===== -->
+    <section class="coach-section fade-in" id="coach-generator">
+        <h2 class="section-title">Ainepocras <span>Entrenador de Ejercicios</span></h2>
+        
+        <div id="aine-coach" class="coach-container">
+            <div class="coach-header">
+                <p>Responde 5 preguntas breves para crear tu plan de entrenamiento personalizado contra la sarcopenia.</p>
+            </div>
+
+            <div class="progress-bar" id="progressBar">
+                <div class="step active"></div>
+                <div class="step"></div>
+                <div class="step"></div>
+                <div class="step"></div>
+                <div class="step"></div>
+            </div>
+
+            <!-- Step 1: Goal -->
+            <div class="step-view active" id="step-0">
+                <div class="question-title">¿Cuál es tu objetivo principal?</div>
+                <div class="options">
+                <button class="option-btn" data-key="goal" data-value="fatloss">
+                    <span>🔥 Pérdida de Grasa y Tonificación</span><span class="check">✓</span>
+                </button>
+                <button class="option-btn" data-key="goal" data-value="muscle">
+                    <span>💪 Ganar Músculo</span><span class="check">✓</span>
+                </button>
+                <button class="option-btn" data-key="goal" data-value="strength">
+                    <span>🏋️ Fuerza y Potencia</span><span class="check">✓</span>
+                </button>
+                <button class="option-btn" data-key="goal" data-value="general">
+                    <span>❤️ Forma Física General</span><span class="check">✓</span>
+                </button>
+                </div>
+                <div class="nav"><span></span><button class="btn btn-primary" id="next-0" disabled>Siguiente →</button></div>
+            </div>
+
+            <!-- Step 2: Experience -->
+            <div class="step-view" id="step-1">
+                <div class="question-title">¿Cuánto tiempo llevas entrenando?</div>
+                <div class="options">
+                <button class="option-btn" data-key="experience" data-value="beginner">
+                    <span>🌱 Principiante (&lt; 6 meses)</span><span class="check">✓</span>
+                </button>
+                <button class="option-btn" data-key="experience" data-value="intermediate">
+                    <span>🌿 Intermedio (6–12 meses)</span><span class="check">✓</span>
+                </button>
+                <button class="option-btn" data-key="experience" data-value="advanced">
+                    <span>🌳 Avanzado (1+ años)</span><span class="check">✓</span>
+                </button>
+                </div>
+                <div class="nav">
+                <button class="btn" id="prev-1">← Atrás</button>
+                <button class="btn btn-primary" id="next-1" disabled>Siguiente →</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Equipment -->
+            <div class="step-view" id="step-2">
+                <div class="question-title">¿Qué equipo tienes?</div>
+                <div class="options">
+                <button class="option-btn" data-key="equipment" data-value="bodyweight">
+                    <span>🧘 Solo Peso Corporal</span><span class="check">✓</span>
+                </button>
+                <button class="option-btn" data-key="equipment" data-value="dumbbells">
+                    <span>🏋️ Mancuernas + Banco</span><span class="check">✓</span>
+                </button>
+                <button class="option-btn" data-key="equipment" data-value="fullgym">
+                    <span>🤖 Acceso Completo al Gimnasio</span><span class="check">✓</span>
+                </button>
+                </div>
+                <div class="nav">
+                <button class="btn" id="prev-2">← Atrás</button>
+                <button class="btn btn-primary" id="next-2" disabled>Siguiente →</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Days -->
+            <div class="step-view" id="step-3">
+                <div class="question-title">¿Cuántos días a la semana puedes entrenar?</div>
+                <div class="options grid-3">
+                <button class="option-btn" data-key="days" data-value="2"><span>2 Días</span><span class="check">✓</span></button>
+                <button class="option-btn" data-key="days" data-value="3"><span>3 Días</span><span class="check">✓</span></button>
+                <button class="option-btn" data-key="days" data-value="4"><span>4 Días</span><span class="check">✓</span></button>
+                <button class="option-btn" data-key="days" data-value="5"><span>5 Días</span><span class="check">✓</span></button>
+                <button class="option-btn" data-key="days" data-value="6"><span>6 Días</span><span class="check">✓</span></button>
+                </div>
+                <div class="nav">
+                <button class="btn" id="prev-3">← Atrás</button>
+                <button class="btn btn-primary" id="next-3" disabled>Siguiente →</button>
+                </div>
+            </div>
+
+            <!-- Step 5: Duration -->
+            <div class="step-view" id="step-4">
+                <div class="question-title">¿Cuánto dura cada sesión?</div>
+                <div class="options">
+                <button class="option-btn" data-key="duration" data-value="short">
+                    <span>⏱️ 30 minutos (enfocado)</span><span class="check">✓</span>
+                </button>
+                <button class="option-btn" data-key="duration" data-value="medium">
+                    <span>⏲️ 45 minutos (estándar)</span><span class="check">✓</span>
+                </button>
+                <button class="option-btn" data-key="duration" data-value="long">
+                    <span>🕰️ 60+ minutos (completo)</span><span class="check">✓</span>
+                </button>
+                </div>
+                <div class="nav">
+                <button class="btn" id="prev-4">← Atrás</button>
+                <button class="btn btn-primary" id="next-4" disabled>Crear Plan 🚀</button>
+                </div>
+            </div>
+
+            <!-- Results Panel -->
+            <div class="step-view results" id="step-results">
+                <div class="plan-meta" id="planMeta"></div>
+
+                <div class="tab-bar">
+                <button class="tab-btn active" data-tab="schedule">Horario</button>
+                <button class="tab-btn" data-tab="details">Ejercicios</button>
+                <button class="tab-btn" data-tab="tips">Consejos del Entrenador</button>
+                </div>
+
+                <div class="tab-panel active" id="tab-schedule">
+                <div class="schedule" id="schedule"></div>
+                </div>
+                <div class="tab-panel" id="tab-details">
+                <div id="details"></div>
+                </div>
+                <div class="tab-panel" id="tab-tips">
+                <div id="tips"></div>
+                </div>
+
+                <div class="nav" style="margin-top:24px">
+                <button class="btn" id="restart">↺ Empezar de Nuevo</button>
+                <button class="btn btn-primary print-btn" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+                </div>
             </div>
         </div>
     </section>
@@ -510,7 +1118,7 @@
         <div class="progress-container">
             <div class="progress-item fade-in">
                 <div class="progress-label">
-                    <span>Semanas 1-4: Fundamentos</span>
+                    <span>Semana 1-4: Fundamento</span>
                     <span>Creando Hábitos</span>
                 </div>
                 <div class="progress-bar-bg">
@@ -519,7 +1127,7 @@
             </div>
             <div class="progress-item fade-in">
                 <div class="progress-label">
-                    <span>Meses 2-3: Ganancia de Fuerza</span>
+                    <span>Mes 2-3: Ganancias de Fuerza</span>
                     <span>Progreso Visible</span>
                 </div>
                 <div class="progress-bar-bg">
@@ -528,7 +1136,7 @@
             </div>
             <div class="progress-item fade-in">
                 <div class="progress-label">
-                    <span>Meses 4-6: Transformación</span>
+                    <span>Mes 4-6: Transformación</span>
                     <span>Cambios Importantes</span>
                 </div>
                 <div class="progress-bar-bg">
@@ -550,16 +1158,20 @@
     <section class="cta-section">
         <h2 class="section-title" style="margin-bottom: 30px;">Hoy es el <span>Día Uno</span></h2>
         <p style="max-width: 600px; margin: 0 auto 40px; color: #ccc; line-height: 1.8; font-size: 1.1rem;">
-            La sarcopenia quiere que bajes el ritmo. Que te rindas. Que aceptes la debilidad como parte del envejecimiento. 
+            La sarcopenia quiere que bajes el ritmo. Que te rindas. Que aceptes la debilidad como parte de envejecer. 
             <strong style="color: #ffbe0b;">Niégate.</strong> Cada fibra muscular que salvas es un día de independencia que ganas.
         </p>
-        <a href="#action" class="cta-button">Elijo la Fuerza 💪</a>
+        <a href="#coach-generator" class="cta-button">Elijo la Fuerza 💪</a>
+
+        <div class="image-display-container fade-in">
+            <img src="ainepocras.png" alt="Vista Previa de la Camiseta Ainepocras" class="tshirt-preview-img">
+        </div>
     </section>
 
     <footer>
-        <p>Creado con 💪 por <a href="https://github.com/ainepocras">ainepocras</a> | Combate la Sarcopenia | Cada Día Cuenta</p>
+        <p>Hecho con 💪 por <a href="https://github.com/ainepocras">ainepocras</a> | Lucha Contra la Sarcopenia | Cada Día Cuenta</p>
         <p style="margin-top: 10px; font-size: 0.75rem; color: #444;">
-            Esta página tiene fines inspiracionales. Consulta siempre a un profesional de la salud antes de comenzar cualquier programa de ejercicios.
+            Esta página tiene fines inspiradores. Consulta siempre a un profesional de la salud antes de comenzar cualquier programa de ejercicio.
         </p>
     </footer>
 
@@ -570,6 +1182,21 @@
     <button class="music-toggle" id="musicBtn" title="Activar Música Motivacional">🎵</button>
 
     <script>
+        // --- 1. AUTOMATIC LANGUAGE REDIRECTION ROUTER ---
+        (function() {
+            const userLang = navigator.language || navigator.userLanguage;
+            const lowerLang = userLang.toLowerCase();
+            const currentFile = window.location.pathname.split("/").pop();
+            
+            if (currentFile !== "es.html" && currentFile !== "nl.html") {
+                if (lowerLang.startsWith('es')) {
+                    window.location.replace("es.html");
+                } else if (lowerLang.startsWith('nl')) {
+                    window.location.replace("nl.html");
+                }
+            }
+        })();
+
         // Particles Background
         const canvas = document.getElementById('particles-canvas');
         const ctx = canvas.getContext('2d');
@@ -674,7 +1301,7 @@
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // Music Toggle
+        // Music Toggle Control
         let isPlaying = false;
         const audio = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
@@ -688,7 +1315,7 @@
                     isPlaying = true;
                 }).catch(e => {
                     console.log('Audio play failed:', e);
-                    alert('No se pudo reproducir el audio. Por favor verifica que synthwave.mp3 exista en la carpeta raíz.');
+                    alert('No se pudo reproducir el audio. Verifica que synthwave.mp3 exista en tu carpeta raíz.');
                 });
             } else {
                 audio.pause();
@@ -699,15 +1326,367 @@
             }
         });
 
-        // Smooth scroll
+        // Smooth scroll transition
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                if(this.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
             });
         });
+
+        // --- 2. FIST IMPACT & LETTER-FLIGHT WORD TRANSITION LOGIC ---
+        window.addEventListener('DOMContentLoaded', () => {
+            const fist = document.getElementById('fist-striker');
+            const lineOld = document.getElementById('line-old');
+            const lineNew = document.getElementById('line-new');
+            const badge = document.getElementById('action-badge');
+            const prefixText = document.getElementById('prefix-text');
+            const strikeLine = document.getElementById('strike-line');
+            const oldLetters = [...lineOld.querySelectorAll('.letter-slot span')];
+            const newLetters = [...lineNew.querySelectorAll('.letter-slot span')];
+
+            // Sarcopenia loses letters right-to-left while Ainepocras gains
+            // letters left-to-right: the last letter of Sarcopenia flies to
+            // become the first letter of Ainepocras, the next-to-last flies
+            // to become the second letter, and so on.
+            function flyLetter(sourceEl, destEl) {
+                const sourceRect = sourceEl.getBoundingClientRect();
+                const destRect = destEl.getBoundingClientRect();
+
+                const flyer = document.createElement('span');
+                flyer.className = 'flying-letter';
+                flyer.textContent = destEl.textContent;
+                flyer.style.left = sourceRect.left + 'px';
+                flyer.style.top = sourceRect.top + 'px';
+                document.body.appendChild(flyer);
+
+                // Source letter disappears as its flyer takes off
+                sourceEl.classList.add('flown');
+
+                // Force layout so the initial position is committed before we
+                // animate the transform (otherwise the browser may skip the
+                // transition straight to the end state).
+                // eslint-disable-next-line no-unused-expressions
+                flyer.getBoundingClientRect();
+
+                requestAnimationFrame(() => {
+                    const dx = destRect.left - sourceRect.left;
+                    const dy = destRect.top - sourceRect.top;
+                    flyer.style.transform = `translate(${dx}px, ${dy}px) rotate(360deg)`;
+                });
+
+                setTimeout(() => {
+                    destEl.classList.add('landed');
+                    flyer.remove();
+                }, 2200);
+            }
+
+            function runWordTransition() {
+                const total = oldLetters.length;
+                const stepDelay = 1100;
+                for (let t = 0; t < total; t++) {
+                    setTimeout(() => {
+                        const sourceEl = oldLetters[total - 1 - t];
+                        const destEl = newLetters[t];
+                        flyLetter(sourceEl, destEl);
+                    }, t * stepDelay);
+                }
+                return (total - 1) * stepDelay + 2200; // approx ms until fully settled
+            }
+
+            setTimeout(() => {
+                fist.classList.add('strike');
+                setTimeout(() => {
+                    document.body.classList.add('screen-quake');
+                    // Step 1: a strike-through line cuts across "Derrota la Sarcopenia"
+                    strikeLine.classList.add('struck');
+
+                    setTimeout(() => {
+                        document.body.classList.remove('screen-quake');
+                    }, 400);
+
+                    // Step 2: after the strike is clearly visible, "Derrota la "
+                    // fades away and collapses, leaving just "Sarcopenia" — the
+                    // strike line fades out along with it.
+                    setTimeout(() => {
+                        prefixText.classList.add('removed');
+                        strikeLine.classList.add('gone');
+
+                        // Step 3: give a beat so the viewer registers
+                        // "Sarcopenia" alone before the letters start breaking
+                        // off and flying to build "Ainepocras".
+                        setTimeout(() => {
+                            const transitionDuration = runWordTransition();
+
+                            setTimeout(() => {
+                                fist.style.transition = 'top 1s ease, opacity 1s ease, transform 1s ease';
+                                fist.style.top = '-150px';
+                                fist.style.opacity = '0';
+                                fist.style.transform = 'translateX(-50%) scale(0)';
+
+                                setTimeout(() => {
+                                    badge.textContent = '🎯 Lucha';
+                                }, 1000);
+                            }, transitionDuration + 600);
+                        }, 1200);
+                    }, 1200);
+                }, 400);
+            }, 3000);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const leftVideo = document.getElementById('leftVideo');
+            if (leftVideo) {
+                leftVideo.volume = 0.65;
+                leftVideo.play().catch(() => {
+                    console.log('Autoplay with audio blocked by browser.');
+                });
+            }
+            const leftVideo2 = document.getElementById('leftVideo2');
+            if (leftVideo2) {
+                leftVideo2.volume = 0.65;
+                leftVideo2.play().catch(() => {
+                    console.log('Autoplay with audio blocked by browser.');
+                });
+            }
+        });
+
+        // ===== COACH SYSTEM RULE ENGINE LOGIC =====
+        const EXERCISE_DB = [
+            { id:'bw_squat', name:'Sentadilla sin Peso', equip:'bodyweight', type:'legs', diff:'beginner', desc:'Pies al ancho de los hombros, cadera atrás y abajo, pecho arriba.' },
+            { id:'bw_lunge', name:'Zancada Caminando', equip:'bodyweight', type:'legs', diff:'beginner', desc:'Da un paso adelante, baja la rodilla trasera hacia el suelo, empuja hacia arriba.' },
+            { id:'bw_glute', name:'Puente de Glúteos', equip:'bodyweight', type:'legs', diff:'beginner', desc:'Acuéstate boca arriba, eleva las caderas hacia el techo, aprieta los glúteos.' },
+            { id:'bw_pushup', name:'Flexión de Pecho', equip:'bodyweight', type:'push', diff:'beginner', desc:'Cuerpo recto, baja el pecho hacia el suelo, empuja hacia arriba.' },
+            { id:'bw_dip', name:'Fondos en Banco', equip:'bodyweight', type:'push', diff:'beginner', desc:'Manos en el banco detrás de ti, baja hasta que los codos formen 90°.' },
+            { id:'bw_pullup', name:'Dominada / Negativa', equip:'bodyweight', type:'pull', diff:'intermediate', desc:'Cuélgate, lleva la barbilla sobre la barra; usa negativas si es necesario.' },
+            { id:'bw_inverted', name:'Remo Invertido', equip:'bodyweight', type:'pull', diff:'beginner', desc:'Bajo una mesa o barra, lleva el pecho hacia ella.' },
+            { id:'bw_plank', name:'Plancha', equip:'bodyweight', type:'core', diff:'beginner', desc:'Mantén el cuerpo recto apoyado en antebrazos y pies.' },
+            { id:'bw_legraise', name:'Elevación de Piernas', equip:'bodyweight', type:'core', diff:'beginner', desc:'Acuéstate boca arriba, eleva las piernas a 90°, baja lentamente.' },
+            { id:'bw_burpee', name:'Burpee', equip:'bodyweight', type:'full', diff:'intermediate', desc:'Agáchate, lleva los pies atrás a plancha, haz una flexión, salta hacia arriba.' },
+            { id:'bw_mtn', name:'Escalador', equip:'bodyweight', type:'core', diff:'beginner', desc:'Posición de plancha, alterna llevando las rodillas al pecho.' },
+            { id:'db_goblet', name:'Sentadilla Goblet', equip:'dumbbells', type:'legs', diff:'beginner', desc:'Sostén una mancuerna a la altura del pecho, baja profundo.' },
+            { id:'db_rdl', name:'Peso Muerto Rumano con Mancuernas', equip:'dumbbells', type:'legs', diff:'intermediate', desc:'Ligera flexión de rodillas, bisagra de cadera hacia atrás, mancuernas cerca de las espinillas.' },
+            { id:'db_bulgarian', name:'Sentadilla Búlgara', equip:'dumbbells', type:'legs', diff:'intermediate', desc:'Pie trasero en el banco, mancuernas a los lados, baja la rodilla trasera.' },
+            { id:'db_press', name:'Press de Banca con Mancuernas', equip:'dumbbells', type:'push', diff:'beginner', desc:'Empuja las mancuernas desde el pecho hasta la extensión completa.' },
+            { id:'db_fly', name:'Aperturas con Mancuernas', equip:'dumbbells', type:'push', diff:'intermediate', desc:'Ligera flexión de codos, abre ampliamente, aprieta el pecho.' },
+            { id:'db_row', name:'Remo a Una Mano con Mancuerna', equip:'dumbbells', type:'pull', diff:'beginner', desc:'Apoyo en banco, lleva la mancuerna hacia la cadera.' },
+            { id:'db_curl', name:'Curl de Bíceps con Mancuernas', equip:'dumbbells', type:'pull', diff:'beginner', desc:'Codos fijos, sube hacia los hombros, baja lentamente.' },
+            { id:'db_ohp', name:'Press Militar con Mancuernas', equip:'dumbbells', type:'push', diff:'beginner', desc:'Empuja las mancuernas desde los hombros hacia arriba.' },
+            { id:'db_shrug', name:'Encogimiento de Hombros con Mancuernas', equip:'dumbbells', type:'pull', diff:'beginner', desc:'Eleva los hombros hacia las orejas, pausa, baja.' },
+            { id:'db_crunch', name:'Abdominal con Peso', equip:'dumbbells', type:'core', diff:'beginner', desc:'Sostén una mancuerna pequeña en el pecho, contrae hacia arriba.' },
+            { id:'gym_backsq', name:'Sentadilla Trasera con Barra', equip:'fullgym', type:'legs', diff:'intermediate', desc:'Barra sobre los trapecios, baja a profundidad, empuja con todo el pie.' },
+            { id:'gym_dead', name:'Peso Muerto con Barra', equip:'fullgym', type:'legs', diff:'intermediate', desc:'Agarra la barra a la altura del medio del pie, pecho arriba, bisagra y ponte de pie.' },
+            { id:'gym_legp', name:'Prensa de Piernas', equip:'fullgym', type:'legs', diff:'beginner', desc:'Pies al ancho de los hombros, baja hasta que las rodillas formen 90°, empuja.' },
+            { id:'gym_bench', name:'Press de Banca con Barra', equip:'fullgym', type:'push', diff:'intermediate', desc:'Junta los omóplatos, empuja en un ligero arco.' },
+            { id:'gym_incline', name:'Press Inclinado', equip:'fullgym', type:'push', visible: true, diff:'intermediate', desc:'Inclinación de 30°, empuja enfocándote en el pecho superior.' },
+            { id:'gym_lat', name:'Jalón al Pecho', equip:'fullgym', type:'pull', diff:'beginner', desc:'Lleva la barra hacia el pecho superior, controla al subir.' },
+            { id:'gym_cabler', name:'Remo en Polea', equip:'fullgym', type:'pull', diff:'beginner', desc:'Siéntate erguido, tira hacia las costillas inferiores, aprieta los omóplatos.' },
+            { id:'gym_face', name:'Face Pull', equip:'fullgym', type:'pull', diff:'beginner', desc:'Tira de la cuerda hacia la cara, rotación externa al final.' },
+            { id:'gym_ohp', name:'Press Militar con Barra', equip:'fullgym', type:'push', diff:'intermediate', desc:'Empuja la barra desde los hombros hasta el bloqueo por encima de la cabeza.' },
+            { id:'gym_hang', name:'Elevación de Piernas Colgado', equip:'fullgym', type:'core', diff:'intermediate', desc:'Cuélgate de la barra, eleva las piernas a 90°, controla al bajar.' },
+            { id:'gym_tread', name:'Caminata Inclinada / Cinta', equip:'fullgym', type:'cardio', diff:'beginner', desc:'Inclinación del 12–15%, ritmo enérgico de 15–20 min.' },
+            { id:'gym_bike', name:'Bicicleta Estática / Remo', equip:'fullgym', type:'cardio', diff:'beginner', desc:'Ritmo constante de 10–20 min o intervalos.' },
+        ];
+
+        const Splits = {
+            2: ['Full Body A', 'Full Body B'],
+            3: ['Push', 'Pull', 'Legs'],
+            4: ['Upper A', 'Lower A', 'Upper B', 'Lower B'],
+            5: ['Push', 'Pull', 'Legs', 'Upper', 'Lower'],
+            6: ['Push A', 'Pull A', 'Legs A', 'Push B', 'Pull B', 'Legs B'],
+        };
+
+        const DAY_LABELS = { 'Full Body A': 'Cuerpo Completo A', 'Full Body B': 'Cuerpo Completo B', 'Push': 'Empuje', 'Pull': 'Tracción', 'Legs': 'Piernas', 'Upper A': 'Tren Superior A', 'Lower A': 'Tren Inferior A', 'Upper B': 'Tren Superior B', 'Lower B': 'Tren Inferior B', 'Upper': 'Tren Superior', 'Lower': 'Tren Inferior', 'Push A': 'Empuje A', 'Pull A': 'Tracción A', 'Legs A': 'Piernas A', 'Push B': 'Empuje B', 'Pull B': 'Tracción B', 'Legs B': 'Piernas B', 'Full Body': 'Cuerpo Completo' };
+        const TYPE_LABELS = { 'legs': 'PIERNAS', 'push': 'EMPUJE', 'pull': 'TRACCIÓN', 'core': 'CORE', 'full': 'CUERPO COMPLETO', 'cardio': 'CARDIO' };
+        const EQUIP_LABELS = { 'bodyweight': 'peso corporal', 'dumbbells': 'mancuernas', 'fullgym': 'gimnasio completo' };
+
+        const RepSchemes = {
+            fatloss: { reps:'12–15', sets:'3', rest:'45–60 seg', note:'Más repeticiones, descansos más cortos para mantener el ritmo cardíaco elevado.' },
+            muscle: { reps:'8–12', sets:'3–4', rest:'60–90 seg', note:'Repeticiones moderadas con tempo controlado para la hipertrofia.' },
+            strength: { reps:'3–6', sets:'4–5', rest:'2–3 min', note:'Menos repeticiones, cargas pesadas, descansos más largos para la producción de fuerza.' },
+            general: { reps:'10–12', sets:'3', rest:'60 seg', note:'Enfoque equilibrado para la salud y la resistencia.' },
+        };
+
+        let currentStep = 0;
+        const answers = {};
+
+        const steps = document.querySelectorAll('.step-view');
+        const progressDots = document.querySelectorAll('.progress-bar .step');
+
+        function updateUI() {
+            steps.forEach((s,i) => s.classList.toggle('active', i === currentStep));
+            progressDots.forEach((d,i) => d.classList.toggle('active', i <= currentStep));
+        }
+
+        function selectOption(btn) {
+            const key = btn.dataset.key;
+            const value = btn.dataset.value;
+            answers[key] = value;
+
+            const siblings = btn.parentElement.querySelectorAll('.option-btn');
+            siblings.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+
+            const nextBtn = document.getElementById(`next-${currentStep}`);
+            if (nextBtn) nextBtn.disabled = false;
+        }
+
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.addEventListener('click', () => selectOption(btn));
+        });
+
+        function goNext() {
+            if (currentStep < 4) {
+                currentStep++;
+                updateUI();
+            } else {
+                buildPlan();
+                currentStep = 5;
+                updateUI();
+            }
+        }
+        function goPrev() {
+            if (currentStep > 0) { currentStep--; updateUI(); }
+        }
+
+        for (let i=0;i<=4;i++) {
+            const n = document.getElementById(`next-${i}`);
+            const p = document.getElementById(`prev-${i}`);
+            if (n) n.addEventListener('click', goNext);
+            if (p) p.addEventListener('click', goPrev);
+        }
+
+        document.getElementById('restart').addEventListener('click', () => {
+            Object.keys(answers).forEach(k => delete answers[k]);
+            currentStep = 0;
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            for (let i=0;i<=4;i++) {
+                const n = document.getElementById(`next-${i}`);
+                if (n) n.disabled = true;
+            }
+            document.getElementById('schedule').innerHTML = '';
+            document.getElementById('details').innerHTML = '';
+            document.getElementById('tips').innerHTML = '';
+            document.getElementById('planMeta').innerHTML = '';
+            updateUI();
+        });
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+            });
+        });
+
+        function buildPlan() {
+            const g = answers.goal;
+            const e = answers.experience;
+            const q = answers.equipment;
+            const d = parseInt(answers.days);
+            const t = answers.duration;
+
+            const scheme = RepSchemes[g];
+            const splitNames = Splits[d] || ['Full Body'];
+            const exCount = t === 'short' ? 5 : t === 'medium' ? 7 : 9;
+
+            const pick = (type, count, difficultyCap) => {
+                const pool = EXERCISE_DB.filter(x =>
+                    x.type === type &&
+                    (x.equip === q || (q === 'fullgym' && (x.equip === 'dumbbells' || x.equip === 'bodyweight' || x.equip === 'fullgym'))) &&
+                    diffOk(x.diff, e)
+                );
+                return pool.sort((a,b)=> a.id.localeCompare(b.id)).slice(0, count);
+            };
+
+            function diffOk(exDiff, userExp) {
+                if (userExp === 'beginner') return exDiff === 'beginner';
+                if (userExp === 'intermediate') return exDiff === 'beginner' || exDiff === 'intermediate';
+                return true;
+            }
+
+            const schedule = [];
+            splitNames.forEach((dayName, idx) => {
+                const day = { name: dayName, exercises: [] };
+                if (dayName.includes('Push')) day.exercises = [...pick('push', Math.ceil(exCount/2), e), ...pick('core', 1, e)];
+                else if (dayName.includes('Pull')) day.exercises = [...pick('pull', Math.ceil(exCount/2), e), ...pick('core', 1, e)];
+                else if (dayName.includes('Legs')) day.exercises = [...pick('legs', Math.ceil(exCount/2), e), ...pick('core', 1, e)];
+                else if (dayName.includes('Upper')) day.exercises = [...pick('push', Math.ceil(exCount/3), e), ...pick('pull', Math.ceil(exCount/3), e), ...pick('core', 1, e)];
+                else if (dayName.includes('Lower')) day.exercises = [...pick('legs', Math.ceil(exCount/2), e), ...pick('core', 1, e)];
+                else day.exercises = [...pick('full', 2, e), ...pick('push', 2, e), ...pick('pull', 2, e), ...pick('legs', 2, e), ...pick('core', 1, e)];
+
+                day.exercises = day.exercises.slice(0, exCount);
+                if ((g === 'fatloss' || g === 'general') && day.exercises.length < exCount) {
+                    const cardio = EXERCISE_DB.filter(x=>x.type==='cardio' && (x.equip===q || q==='fullgym')).slice(0,1);
+                    day.exercises.push(...cardio);
+                }
+                schedule.push(day);
+            });
+
+            const meta = document.getElementById('planMeta');
+            meta.innerHTML = `
+                <span class="tag">${g === 'fatloss' ? 'Pérdida de Grasa' : g === 'muscle' ? 'Ganancia Muscular' : g === 'strength' ? 'Fuerza' : 'Forma Física General'}</span>
+                <span class="tag">${d} días/semana</span>
+                <span class="tag">${t === 'short' ? '30 min' : t === 'medium' ? '45 min' : '60+ min'}</span>
+                <span class="tag">${scheme.sets} series × ${scheme.reps}</span>
+                <span class="tag">${q === 'fullgym' ? 'Gimnasio Completo' : q === 'dumbbells' ? 'Mancuernas' : 'Peso Corporal'}</span>
+            `;
+
+            const schedEl = document.getElementById('schedule');
+            schedEl.innerHTML = schedule.map((day, i) => `
+                <div class="day-card">
+                <h3>Día ${i+1} — ${DAY_LABELS[day.name] || day.name}</h3>
+                <ul class="ex-list">
+                    ${day.exercises.map(ex => `
+                    <li>
+                        <span class="ex-name">${ex.name}</span>
+                        <span class="ex-meta">${scheme.sets} × ${scheme.reps} · ${scheme.rest}</span>
+                    </li>
+                    `).join('')}
+                </ul>
+                </div>
+            `).join('');
+
+            const allEx = [...new Map(schedule.flatMap(d => d.exercises).map(x => [x.id, x])).values()];
+            document.getElementById('details').innerHTML = allEx.map(ex => `
+                <div class="day-card" style="margin-bottom:12px">
+                <h3>${ex.name}</h3>
+                <p style="margin:6px 0 0;color:#aaa">${ex.desc}</p>
+                <div class="ex-meta" style="margin-top:8px">Objetivo: ${TYPE_LABELS[ex.type] || ex.type.toUpperCase()} · Equipo: ${EQUIP_LABELS[ex.equip] || ex.equip}</div>
+                </div>
+            `).join('');
+
+            const tips = [];
+            if (e === 'beginner') { tips.push('Concéntrate en la técnica antes que en el peso. Grábate o usa un espejo.'); tips.push('Descansa 48 horas antes de volver a entrenar el mismo grupo muscular.'); }
+            if (e === 'advanced') { tips.push('Considera la periodización: cambia los rangos de repeticiones cada 4–6 semanas.'); tips.push('Añade una semana de descarga después de 6–8 semanas de entrenamiento intenso.'); }
+            if (g === 'fatloss') { tips.push('La nutrición es lo más importante: busca un ligero déficit calórico y alta proteína.'); tips.push('Añade 10 min de caminata inclinada después de las sesiones para gasto extra.'); }
+            if (g === 'muscle') { tips.push('Objetivo de proteína: aproximadamente 1.6–2.2 g por kg de peso corporal al día.'); tips.push('Duerme 7–9 horas; la mayor parte de la reparación muscular ocurre durante el sueño profundo.'); }
+            if (g === 'strength') { tips.push('Registra cada levantamiento. La sobrecarga progresiva es el motor principal.'); tips.push('Tensa el core como si alguien fuera a golpearte en cada serie pesada.'); }
+            if (q === 'bodyweight') { tips.push('Para progresar, reduce el tempo o añade más repeticiones antes de avanzar a variaciones más difíciles.'); }
+            if (d >= 5) { tips.push('Con 5–6 días, presta atención a la fatiga; cambia un día duro por uno de descarga si es necesario.'); }
+
+            document.getElementById('tips').innerHTML = `
+                <div class="advice-box">
+                <h4>Notas de tu Plan</h4>
+                <ul>
+                    <li><strong>Series/Repeticiones:</strong> ${scheme.sets} series de ${scheme.reps} repeticiones</li>
+                    <li><strong>Descanso:</strong> ${scheme.rest}</li>
+                    <li><strong>Principio:</strong> ${scheme.note}</li>
+                </ul>
+                </div>
+                <div class="advice-box">
+                <h4>Consejos del Entrenador</h4>
+                <ul>
+                    ${tips.map(t => `<li>${t}</li>`).join('')}
+                </ul>
+                </div>
+            `;
+        }
     </script>
 </body>
 </html>
