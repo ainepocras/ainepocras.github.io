@@ -3,7 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ainepocras - Fight Sarcopenia</title>
+    <title>Ainepocras & Einepocras - Fight Sarcopenia</title>
+    
+    <!-- SEO & Search Engine Optimization -->
+    <meta name="description" content="Ainepocras (and Einepocras in Dutch) is your guide to fighting and reversing sarcopenia through resistance training, nutrition, and lifestyle habits.">
+    <link rel="canonical" href="https://ainepocras.github.io/" />
+    
+    <!-- Multi-language indexing (hreflang) -->
+    <link rel="alternate" hreflang="en" href="https://ainepocras.github.io/" />
+    <link rel="alternate" hreflang="nl" href="https://ainepocras.github.io/nl.html" />
+    <link rel="alternate" hreflang="es" href="https://ainepocras.github.io/es.html" />
+    <link rel="alternate" hreflang="x-default" href="https://ainepocras.github.io/" />
+
+    <!-- Schema.org Search Engine Entity Connection -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Ainepocras",
+      "alternateName": ["Einepocras", "Anti-Sarcopenia Coach"],
+      "url": "https://ainepocras.github.io/",
+      "inLanguage": ["en", "nl", "es"]
+    }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght=300;400;600;700;900&family=Playfair+Display:wght=700&display=swap" rel="stylesheet">
     <style>
@@ -1287,10 +1310,6 @@
             const oldLetters = [...lineOld.querySelectorAll('.letter-slot span')];
             const newLetters = [...lineNew.querySelectorAll('.letter-slot span')];
 
-            // Sarcopenia loses letters right-to-left while Ainepocras gains
-            // letters left-to-right: the last letter of Sarcopenia flies to
-            // become the first letter of Ainepocras, the next-to-last flies
-            // to become the second letter, and so on.
             function flyLetter(sourceEl, destEl) {
                 const sourceRect = sourceEl.getBoundingClientRect();
                 const destRect = destEl.getBoundingClientRect();
@@ -1302,12 +1321,8 @@
                 flyer.style.top = sourceRect.top + 'px';
                 document.body.appendChild(flyer);
 
-                // Source letter disappears as its flyer takes off
                 sourceEl.classList.add('flown');
 
-                // Force layout so the initial position is committed before we
-                // animate the transform (otherwise the browser may skip the
-                // transition straight to the end state).
                 // eslint-disable-next-line no-unused-expressions
                 flyer.getBoundingClientRect();
 
@@ -1333,7 +1348,7 @@
                         flyLetter(sourceEl, destEl);
                     }, t * stepDelay);
                 }
-                return (total - 1) * stepDelay + 2200; // approx ms until fully settled
+                return (total - 1) * stepDelay + 2200;
             }
 
             setTimeout(() => {
@@ -1345,8 +1360,6 @@
                         document.body.classList.remove('screen-quake');
                     }, 400);
 
-                    // Give a beat so the viewer fully registers "Sarcopenia"
-                    // intact before the letters start breaking off.
                     setTimeout(() => {
                         const transitionDuration = runWordTransition();
 
